@@ -20,8 +20,9 @@ enum ButtonType {
   continuous
 }
 
-// enum RollerType {
-//   rollerFirst,
-//   rollerFirst,
-//   continuous
-// }
+enum RollerType {
+  firstRoller,
+  secondRoller,
+  thirdRoller,
+  magnificationRoller
+}

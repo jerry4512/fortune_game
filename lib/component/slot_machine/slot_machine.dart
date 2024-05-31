@@ -150,7 +150,10 @@ class SlotMachine extends PositionComponent {
       print('连续转动');
       if(isContinuousSpinning){
         isContinuousSpinning = false;
-        stopSpinning();
+        stopSpinning(RollerType.firstRoller);
+        stopSpinning(RollerType.secondRoller);
+        stopSpinning(RollerType.thirdRoller);
+        stopSpinning(RollerType.magnificationRoller);
       }else{
         isContinuousSpinning = true;
         startSpinning();
@@ -179,10 +182,10 @@ class SlotMachine extends PositionComponent {
   //初始化
   Future<void> init() async {
     //初始化EffectController
-    slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), 7);
-    slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), 7);
-    slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), 7);
-    slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), 7);
+    slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), 3);
+    slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), 6);
+    slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), 9);
+    slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), 12);
 
     //方块行放入一个List，方便之后操作
     rollersList.add(blocksRollerFirst);
@@ -237,10 +240,17 @@ class SlotMachine extends PositionComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if(slotMachineBlocksRollerFirstEffectController.completed && slotMachineBlocksRollerSecondEffectController.completed && slotMachineBlocksRollerThirdEffectController.completed && slotMachineMagnificationRollerEffectController.completed &&rollerState == RollerState.rolling){
-      stopSpinning();
+    if(rollerState == RollerState.rolling){
+      if(slotMachineBlocksRollerFirstEffectController.completed){
+        stopSpinning(RollerType.firstRoller);
+      }else if(slotMachineBlocksRollerSecondEffectController.completed){
+        stopSpinning(RollerType.secondRoller);
+      }else if(slotMachineBlocksRollerThirdEffectController.completed){
+        stopSpinning(RollerType.thirdRoller);
+      }else if(slotMachineMagnificationRollerEffectController.completed){
+        stopSpinning(RollerType.magnificationRoller);
+      }
     }
-
   }
 
   @override
@@ -317,39 +327,45 @@ class SlotMachine extends PositionComponent {
   }
 
   //停止转动
-  void stopSpinning(){
+  void stopSpinning(RollerType rollerType){
     print('停止转动');
-    rollerState = RollerState.stopped;
+
     // 重置MoveEffect
-    firstMoveEffect.reset();
-    secondMoveEffect.reset();
-    thirdMoveEffect.reset();
-    magnificationMoveEffect.reset();
     // 移除所有Effect
-    slotMachineBlocksFirstRoller.removeAll(slotMachineBlocksFirstRoller.children.whereType<Effect>());
-    slotMachineBlocksSecondRoller.removeAll(slotMachineBlocksSecondRoller.children.whereType<Effect>());
-    slotMachineBlocksThirdRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<Effect>());
-    slotMachineMagnificationRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<Effect>());
-
     //重新赋予方块
-    slotMachineBlocksFirstRoller.refreshBlocks();
-    slotMachineBlocksSecondRoller.refreshBlocks();
-    slotMachineBlocksThirdRoller.refreshBlocks();
-    slotMachineMagnificationRoller.refreshBlocks();
-
     //重新赋予位置
-    slotMachineBlocksFirstRoller.position = Vector2(-268, -96);
-    slotMachineBlocksSecondRoller.position = Vector2(-272, -96);
-    slotMachineBlocksThirdRoller.position = Vector2(-276, -96);
-    slotMachineMagnificationRoller.position = Vector2(200,-100);
-
-    checkWin();
-
-    if(isContinuousSpinning){
-      Future.delayed(const Duration(seconds: 1), () {
-        startSpinning();
-      });
-
+    switch (rollerType) {
+      case RollerType.firstRoller:
+        firstMoveEffect.reset();
+        slotMachineBlocksFirstRoller.removeAll(slotMachineBlocksFirstRoller.children.whereType<Effect>());
+        slotMachineBlocksFirstRoller.refreshBlocks();
+        slotMachineBlocksFirstRoller.position = Vector2(-268, -96);
+        break;
+      case RollerType.secondRoller:
+        secondMoveEffect.reset();
+        slotMachineBlocksSecondRoller.removeAll(slotMachineBlocksSecondRoller.children.whereType<Effect>());
+        slotMachineBlocksSecondRoller.refreshBlocks();
+        slotMachineBlocksSecondRoller.position = Vector2(-272, -96);
+        break;
+      case RollerType.thirdRoller:
+        thirdMoveEffect.reset();
+        slotMachineBlocksThirdRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<Effect>());
+        slotMachineMagnificationRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<Effect>());
+        slotMachineBlocksThirdRoller.refreshBlocks();
+        slotMachineBlocksThirdRoller.position = Vector2(-276, -96);
+        break;
+      case RollerType.magnificationRoller:
+        magnificationMoveEffect.reset();
+        slotMachineMagnificationRoller.refreshBlocks();
+        slotMachineMagnificationRoller.position = Vector2(200,-100);
+        rollerState = RollerState.stopped;
+        checkWin();
+        if(isContinuousSpinning){
+          Future.delayed(const Duration(seconds: 1), () {
+            startSpinning();
+          });
+        }
+        break;
     }
   }
 
