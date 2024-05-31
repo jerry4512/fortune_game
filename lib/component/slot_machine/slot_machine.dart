@@ -390,13 +390,16 @@ class SlotMachine extends PositionComponent {
         print('----左上右下斜向有相同----');
         add(winForthRowLine);
       }
-
       if(firstForthBlockImage == secondCenterBlockImage && firstForthBlockImage == thirdSecondBlockImage){
         print('----左下右上斜向有相同----');
         add(windFifthRowLine);
       }
-
     }
+
+
+
+
+
   }
 
 }

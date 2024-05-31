@@ -9,7 +9,7 @@ import 'package:fortune_game/symbol/symbol_blocks.dart';
 
 typedef OnTap = void Function(String);
 
-class BetNumber extends PositionComponent with TapCallbacks{
+class BetNumber extends TextComponent with TapCallbacks{
 
   final OnTap onTap;
   String number;
@@ -18,13 +18,10 @@ class BetNumber extends PositionComponent with TapCallbacks{
 
   @override
   void onLoad() async {
-
-    add(TextComponent(
-      anchor: Anchor.topCenter,
-      text: number,
-      scale: Vector2(0.8,0.8),
-      position: numberPosition,
-    ));
+    text = number;
+    anchor = Anchor.topCenter;
+    scale = Vector2(0.8,0.8);
+    position = numberPosition;
     super.onLoad();
   }
 

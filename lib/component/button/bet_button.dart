@@ -17,17 +17,21 @@ class BetButton extends SpriteComponent with TapCallbacks{
 
   String betNumber = '3';
 
+  late TextComponent textComponent;
+
   @override
   void onLoad() async {
     sprite = await Sprite.load('buttons/icon_bet.png');
     init();
 
-    add(TextComponent(
+    textComponent = TextComponent(
       text: 'Bet $betNumber',
-      position: Vector2(2, 50),
+      position: Vector2(-1, 50),
       size: Vector2(50, 20),
       scale: Vector2(0.9,0.9),
-    ));
+    );
+
+    add(textComponent);
 
     super.onLoad();
   }
@@ -87,7 +91,17 @@ class BetButton extends SpriteComponent with TapCallbacks{
   }
 
   void betNumberOnTap(String number){
-    print(number);
+    betNumber = number;
+    remove(textComponent);
+    textComponent = TextComponent(
+      text: 'Bet $betNumber',
+      position: Vector2(-1, 50),
+      size: Vector2(50, 20),
+      scale: Vector2(0.9,0.9),
+    );
+    add(textComponent);
+    remove(spriteComponent);
+    removeAll(components);
   }
 
   @override

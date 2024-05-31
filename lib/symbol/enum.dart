@@ -14,7 +14,14 @@ enum RollerState {
   bouncing
 }
 
+//按钮类型
 enum ButtonType {
   single,
   continuous
 }
+
+// enum RollerType {
+//   rollerFirst,
+//   rollerFirst,
+//   continuous
+// }
