@@ -60,6 +60,7 @@ class SlotMachine extends PositionComponent {
   late SpriteComponent winThirdRowLine;
   late SpriteComponent winForthRowLine;
   late SpriteComponent windFifthRowLine;
+  List<SpriteComponent> winLines = [];
 
   //當前滾動狀態。
   RollerState rollerState = RollerState.stopped;
@@ -235,6 +236,7 @@ class SlotMachine extends PositionComponent {
         size: Vector2(495,225),
         position: Vector2(-300,-70)
     );
+    winLines = [winFirstRowLine,winSecondRowLine,winThirdRowLine,winForthRowLine,windFifthRowLine];
   }
 
   @override
@@ -290,18 +292,12 @@ class SlotMachine extends PositionComponent {
   //开始转动
   void startSpinning(){
     print('开始转动');
-    if(winFirstRowLine.isMounted){
-      remove(winFirstRowLine);
-    }else if(winSecondRowLine.isMounted){
-      remove(winSecondRowLine);
-    }else if(winThirdRowLine.isMounted){
-      remove(winThirdRowLine);
-    }else if(winForthRowLine.isMounted){
-      remove(winForthRowLine);
-    }else if(windFifthRowLine.isMounted){
-      remove(windFifthRowLine);
+    //移除所有winLine
+    for(int i = 0;i<winLines.length;i++){
+     if(winLines[i].isMounted){
+       remove(winLines[i]);
+     }
     }
-
     rollerState = RollerState.rolling;
     firstMoveEffect = MoveEffect.to(
         Vector2(slotMachineBlocksFirstRoller.position.x, slotMachineBlocksFirstRoller.position.y + 200),
@@ -389,7 +385,69 @@ class SlotMachine extends PositionComponent {
           if(i == 2){
             add(winFirstRowLine);
           }else if(i == 3){
+            add(winSecondRowLine);
+          }else{
+            add(winThirdRowLine);
+          }
+        }
+        //特殊老虎方块有一个
+        if(firstBlockImage == secondBlockImage && 'blocks/symbol_07.png' == thirdBlockImage){
+          print('----横向有相同(特殊老虎方块一个)----');
+          if(i == 2){
             add(winFirstRowLine);
+          }else if(i == 3){
+            add(winSecondRowLine);
+          }else{
+            add(winThirdRowLine);
+          }
+        }
+        if(secondBlockImage == thirdBlockImage  && 'blocks/symbol_07.png' == firstBlockImage ){
+          print('----横向有相同(特殊老虎方块一个)----');
+          if(i == 2){
+            add(winFirstRowLine);
+          }else if(i == 3){
+            add(winSecondRowLine);
+          }else{
+            add(winThirdRowLine);
+          }
+        }
+        if(firstBlockImage == thirdBlockImage  && 'blocks/symbol_07.png' == secondBlockImage){
+          print('----横向有相同(特殊老虎方块一个)----');
+          if(i == 2){
+            add(winFirstRowLine);
+          }else if(i == 3){
+            add(winSecondRowLine);
+          }else{
+            add(winThirdRowLine);
+          }
+        }
+        //特殊老虎方块有两个
+        if(firstBlockImage == secondBlockImage  && 'blocks/symbol_07.png' == firstBlockImage){
+          print('----横向有相同(特殊老虎方块两块)----');
+          if(i == 2){
+            add(winFirstRowLine);
+          }else if(i == 3){
+            add(winSecondRowLine);
+          }else{
+            add(winThirdRowLine);
+          }
+        }
+        if(firstBlockImage == thirdBlockImage  && 'blocks/symbol_07.png' == firstBlockImage){
+          print('----横向有相同(特殊老虎方块两块)----');
+          if(i == 2){
+            add(winFirstRowLine);
+          }else if(i == 3){
+            add(winSecondRowLine);
+          }else{
+            add(winThirdRowLine);
+          }
+        }
+        if(secondBlockImage == thirdBlockImage  && 'blocks/symbol_07.png' == secondBlockImage){
+          print('----横向有相同(特殊老虎方块两块)----');
+          if(i == 2){
+            add(winFirstRowLine);
+          }else if(i == 3){
+            add(winSecondRowLine);
           }else{
             add(winThirdRowLine);
           }
@@ -410,6 +468,58 @@ class SlotMachine extends PositionComponent {
         print('----左下右上斜向有相同----');
         add(windFifthRowLine);
       }
+      //特殊老虎方块有一个
+      if(firstSecondBlockImage == secondCenterBlockImage && 'blocks/symbol_07.png' == thirdForthBlockImage){
+        print('----左上右下斜向有相同(特殊老虎方块一个)----');
+        add(winForthRowLine);
+      }
+      if(firstSecondBlockImage == thirdForthBlockImage && 'blocks/symbol_07.png' == secondCenterBlockImage){
+        print('----左上右下斜向有相同(特殊老虎方块一个)----');
+        add(winForthRowLine);
+      }
+      if(secondCenterBlockImage == thirdForthBlockImage && 'blocks/symbol_07.png' == firstSecondBlockImage){
+        print('----左上右下斜向有相同(特殊老虎方块一个)----');
+        add(winForthRowLine);
+      }
+      if(firstForthBlockImage == secondCenterBlockImage && 'blocks/symbol_07.png'  == thirdSecondBlockImage){
+        print('----左下右上斜向有相同(特殊老虎方块一个)----');
+        add(windFifthRowLine);
+      }
+      if(firstForthBlockImage == thirdSecondBlockImage && 'blocks/symbol_07.png' == secondCenterBlockImage){
+        print('----左下右上斜向有相同(特殊老虎方块一个)----');
+        add(windFifthRowLine);
+      }
+      if(secondCenterBlockImage == thirdSecondBlockImage && 'blocks/symbol_07.png' == firstForthBlockImage){
+        print('----左下右上斜向有相同(特殊老虎方块一个)----');
+        add(windFifthRowLine);
+      }
+      //特殊老虎方块有两个
+      if(firstSecondBlockImage == secondCenterBlockImage && firstSecondBlockImage == 'blocks/symbol_07.png'){
+        print('----左上右下斜向有相同(特殊老虎方块两块)----');
+        add(winForthRowLine);
+      }
+      if(secondCenterBlockImage == thirdForthBlockImage && secondCenterBlockImage == 'blocks/symbol_07.png'){
+        print('----左上右下斜向有相同(特殊老虎方块两块)----');
+        add(winForthRowLine);
+      }
+      if(firstSecondBlockImage == thirdForthBlockImage && firstSecondBlockImage == 'blocks/symbol_07.png'){
+        print('----左上右下斜向有相同(特殊老虎方块两块)----');
+        add(winForthRowLine);
+      }
+      if(firstForthBlockImage == secondCenterBlockImage && firstForthBlockImage == 'blocks/symbol_07.png'){
+        print('----左下右上斜向有相同(特殊老虎方块两块)----');
+        add(windFifthRowLine);
+      }
+      if(secondCenterBlockImage == thirdSecondBlockImage && secondCenterBlockImage == 'blocks/symbol_07.png'){
+        print('----左下右上斜向有相同(特殊老虎方块两块)----');
+        add(windFifthRowLine);
+      }
+      if(firstForthBlockImage == thirdSecondBlockImage && firstForthBlockImage == 'blocks/symbol_07.png'){
+        print('----左下右上斜向有相同(特殊老虎方块两块)----');
+        add(windFifthRowLine);
+      }
+
+
     }
 
 
