@@ -545,7 +545,8 @@ class SlotMachine extends PositionComponent {
         magnificationMoveEffect.reset();
         checkWin();
         if(isContinuousSpinning){
-          Future.delayed(const Duration(seconds: 1), () {
+          int delay = (isWin)?13:1;
+          Future.delayed(Duration(seconds: delay), () {
             startSpinning();
           });
         }
