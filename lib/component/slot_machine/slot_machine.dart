@@ -122,7 +122,7 @@ class SlotMachine extends PositionComponent {
 
   @override
   Future<void> onLoad() async {
-    init();
+    await init();
 
     slotMachineFrame = SpriteComponent(
       sprite: await Sprite.load('slot_machine.png'),
