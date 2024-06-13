@@ -1,4 +1,3 @@
-
 import 'dart:math';
 import 'dart:ui';
 import 'package:flame/components.dart';
@@ -17,7 +16,6 @@ import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
 import 'package:fortune_game/component/button/spin_button.dart';
 import 'package:fortune_game/component/system_alert/big_win.dart';
 import 'package:fortune_game/component/system_alert/frame_win_bg.dart';
-import 'package:fortune_game/component/system_alert/line_hint.dart';
 import 'package:fortune_game/component/system_alert/mega_win.dart';
 import 'package:fortune_game/component/system_alert/super_win.dart';
 import 'package:fortune_game/component/system_alert/system_alert.dart';
@@ -113,9 +111,8 @@ class SlotMachine extends PositionComponent {
   //ex标签
   late SpriteComponent exTag;
 
+  //连线成功提示
   late SpriteComponent frameWinBg;
-
-  ///假色块模动囃
   late PositionComponent bigWin;
   late PositionComponent megaWin;
   late PositionComponent superWin;
@@ -173,17 +170,12 @@ class SlotMachine extends PositionComponent {
       anchor: Anchor.topCenter,
     ));
 
-    clipComponentFirst = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(-135,-100), size: Vector2(143, 290), children: firstComponents);
-    clipComponentSecond = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(7,-100), size: Vector2(143, 290), children: secondComponents);
-    clipComponentThird = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(149,-100), size: Vector2(143, 290), children: thirdComponents);
-
     //方块行
     add(clipComponentFirst);
     add(clipComponentSecond);
     add(clipComponentThird);
 
     //倍率行
-    clipComponentMagnification = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(275,-100), size: Vector2(130, 300), children: magnificationComponents);
     add(clipComponentMagnification);
 
     //倍率行方块框
@@ -282,6 +274,11 @@ class SlotMachine extends PositionComponent {
     slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), 9);
     slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), 12);
 
+    // slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), 9);
+    // slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), 12);
+    // slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), 15);
+    // slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), 18);
+
     eXButtonOpenEffectController = LinearEffectController(0.55);
     eXButtonCloseEffectController = LinearEffectController(0.55);
 
@@ -301,10 +298,17 @@ class SlotMachine extends PositionComponent {
     secondComponents =[slotMachineBlocksSecondRoller];
     thirdComponents =[slotMachineBlocksThirdRoller];
 
+    clipComponentFirst = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(-135,-100), size: Vector2(143, 290), children: firstComponents);
+    clipComponentSecond = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(7,-100), size: Vector2(143, 290), children: secondComponents);
+    clipComponentThird = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(149,-100), size: Vector2(143, 290), children: thirdComponents);
+
     //倍率行
     addBlocks(magnification, BlockType.magnification);
     slotMachineMagnificationRoller = SlotMachineMagnificationRoller(position: Vector2(200,-100), blocksRoller: magnification, blocksPositions: SymbolBlocks().magnificationPositions);
     magnificationComponents = [slotMachineMagnificationRoller];
+
+    clipComponentMagnification = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(275,-100), size: Vector2(130, 300), children: magnificationComponents);
+
 
     //连线
     winFirstRowLine = SpriteComponent(
@@ -366,13 +370,32 @@ class SlotMachine extends PositionComponent {
   void update(double dt) {
     super.update(dt);
     if(rollerState == RollerState.rolling){
+      if(!slotMachineBlocksRollerFirstEffectController.completed){
+        slotMachineBlocksFirstRoller.refreshBlocks();
+      }
+      if(!slotMachineBlocksRollerSecondEffectController.completed){
+        slotMachineBlocksSecondRoller.refreshBlocks();
+      }
+      if(!slotMachineBlocksRollerThirdEffectController.completed){
+        slotMachineBlocksThirdRoller.refreshBlocks();
+      }
+      if(!slotMachineMagnificationRollerEffectController.completed){
+        slotMachineMagnificationRoller.refreshBlocks();
+      }
       if(slotMachineBlocksRollerFirstEffectController.completed){
+        print('方块第一行停止转动');
         stopSpinning(RollerType.firstRoller);
-      }else if(slotMachineBlocksRollerSecondEffectController.completed){
+      }
+      if(slotMachineBlocksRollerSecondEffectController.completed){
+        print('方块第二行停止转动');
         stopSpinning(RollerType.secondRoller);
-      }else if(slotMachineBlocksRollerThirdEffectController.completed){
+      }
+      if(slotMachineBlocksRollerThirdEffectController.completed){
+        print('方块第三行停止转动');
         stopSpinning(RollerType.thirdRoller);
-      }else if(slotMachineMagnificationRollerEffectController.completed){
+      }
+      if(slotMachineMagnificationRollerEffectController.completed){
+        print('倍率方块停止转动');
         stopSpinning(RollerType.magnificationRoller);
       }
     }
@@ -487,37 +510,41 @@ class SlotMachine extends PositionComponent {
 
   //停止转动
   void stopSpinning(RollerType rollerType){
-    print('停止转动');
-
     // 重置MoveEffect
     // 移除所有Effect
     //重新赋予方块
     //重新赋予位置
     switch (rollerType) {
       case RollerType.firstRoller:
-        firstMoveEffect.reset();
         slotMachineBlocksFirstRoller.removeAll(slotMachineBlocksFirstRoller.children.whereType<Effect>());
-        slotMachineBlocksFirstRoller.refreshBlocks();
+        // slotMachineBlocksFirstRoller.refreshBlocks();
         slotMachineBlocksFirstRoller.position = Vector2(-268, -96);
+
         break;
       case RollerType.secondRoller:
-        secondMoveEffect.reset();
         slotMachineBlocksSecondRoller.removeAll(slotMachineBlocksSecondRoller.children.whereType<Effect>());
-        slotMachineBlocksSecondRoller.refreshBlocks();
+        // slotMachineBlocksSecondRoller.refreshBlocks();
         slotMachineBlocksSecondRoller.position = Vector2(-272, -96);
+
+
         break;
       case RollerType.thirdRoller:
-        thirdMoveEffect.reset();
         slotMachineBlocksThirdRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<Effect>());
         slotMachineMagnificationRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<Effect>());
-        slotMachineBlocksThirdRoller.refreshBlocks();
+        // slotMachineBlocksThirdRoller.refreshBlocks();
         slotMachineBlocksThirdRoller.position = Vector2(-276, -96);
+
+
         break;
       case RollerType.magnificationRoller:
         rollerState = RollerState.stopped;
-        magnificationMoveEffect.reset();
-        slotMachineMagnificationRoller.refreshBlocks();
+        // slotMachineMagnificationRoller.refreshBlocks();
         slotMachineMagnificationRoller.position = Vector2(200,-100);
+        firstMoveEffect.reset();
+        secondMoveEffect.reset();
+        thirdMoveEffect.reset();
+        magnificationMoveEffect.reset();
+
         checkWin();
         if(isContinuousSpinning){
           Future.delayed(const Duration(seconds: 1), () {
