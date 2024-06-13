@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flutter/material.dart';
 import 'package:fortune_game/symbol/enum.dart';
 
 
@@ -36,6 +39,11 @@ class SlotMachineRollerBlock extends SpriteComponent {
     }
 
     super.onLoad();
+  }
+
+  void addMask(){
+    add(RectangleComponent(size: size, paint: Paint()..color = Colors.black.withOpacity(0.5)));
+
   }
 
 }

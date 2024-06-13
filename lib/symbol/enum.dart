@@ -20,6 +20,15 @@ enum ButtonType {
   continuous
 }
 
+//线连接类型
+enum LineConnectionType {
+  horizontal,
+  //左上右下
+  leftUpRightDown,
+  //左下右上
+  leftDownRightUp,
+}
+
 enum RollerType {
   firstRoller,
   secondRoller,

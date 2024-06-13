@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
 import 'package:fortune_game/symbol/enum.dart';
 import 'package:fortune_game/symbol/symbol_blocks.dart';
