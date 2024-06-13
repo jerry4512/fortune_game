@@ -10,7 +10,9 @@ import 'package:fortune_game/component/system_alert/confirm_button.dart';
 
 class BigWin extends PositionComponent with TapCallbacks{
 
-  BigWin() : super(anchor: Anchor.center, priority: 2);
+  String score;
+
+  BigWin({required this.score}) : super(anchor: Anchor.center, priority: 2);
 
   late ScaleEffect scaleEffect;
   late MoveEffect moveEffect;
@@ -21,7 +23,7 @@ class BigWin extends PositionComponent with TapCallbacks{
 
     scaleEffect = ScaleEffect.to(Vector2(1.2,1.2),RepeatedEffectController(LinearEffectController(1), 6));
     spriteComponent = SpriteComponent(
-      sprite: await Sprite.load('/win_hint/big_win.png'),
+      sprite: await Sprite.load('win_hint/big_win.png'),
       anchor: Anchor.bottomCenter,
     );
     spriteComponent.add(scaleEffect);
@@ -30,7 +32,7 @@ class BigWin extends PositionComponent with TapCallbacks{
 
     add(spriteComponent);
 
-    add(BigWinLineHint(score: '3'));
+    add(BigWinLineHint(score: score));
 
 
     super.onLoad();

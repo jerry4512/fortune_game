@@ -4,10 +4,15 @@ import 'package:fortune_game/symbol/symbol_blocks.dart';
 
 class CalculateWin {
 
+  static List<String> winBlock = [];
+
+  static List<String> winMagnificationList = [];
+
   int getPoints(String firstBlockImage, String secondBlockImage, String thirdBlockImage, String magnificationBlockImage,  String bettingAmount){
     int bettingOdds = 0;
     int points = 0;
     int specialRate = SymbolBlocks().specialRateMap[magnificationBlockImage];
+    winMagnificationList = [magnificationBlockImage];
     //三个相同
     if(firstBlockImage == secondBlockImage && secondBlockImage == thirdBlockImage){
       switch(firstBlockImage){
@@ -69,7 +74,10 @@ class CalculateWin {
     print('押注額： $bettingAmount' );
     print('倍率： $specialRate' );
     print('$bettingOdds/5 x${bettingAmount}x$specialRate' );
-    double result = (bettingOdds/5) * bettingAmount * specialRate;
+    double result1 = (bettingOdds/5);
+    double result = result1* bettingAmount * specialRate;
+    print('中獎贏分： $result');
+    print('中獎贏分：${result.toInt()}');
     return result.toInt();
   }
 

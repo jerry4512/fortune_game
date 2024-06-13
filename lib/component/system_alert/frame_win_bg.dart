@@ -9,9 +9,10 @@ import 'package:fortune_game/component/system_alert/line_hint.dart';
 
 
 class FrameWinBg extends SpriteComponent with TapCallbacks{
-  final String content;
+  final String score;
+  final String bettingOdds;
 
-  FrameWinBg({required this.content}) : super(anchor: Anchor.center);
+  FrameWinBg({required this.score,required this.bettingOdds}) : super(anchor: Anchor.center);
 
   late TextComponent contentTextComponent;
 
@@ -23,7 +24,7 @@ class FrameWinBg extends SpriteComponent with TapCallbacks{
       Vector2.all(1.2),
       EffectController(duration: 0.3),
     );
-    sprite = await Sprite.load('/win_hint/frame_win_bg.png');
+    sprite = await Sprite.load('win_hint/frame_win_bg.png');
     add(scaleEffect);
 
     contentTextComponent = TextComponent(
@@ -33,7 +34,7 @@ class FrameWinBg extends SpriteComponent with TapCallbacks{
           color: Color.fromRGBO(237, 168, 43, 1)
         )
       ),
-      text: content,
+      text: score,
       anchor: Anchor.center,
       position: Vector2(150,55),
       priority: 2
@@ -41,7 +42,7 @@ class FrameWinBg extends SpriteComponent with TapCallbacks{
     add(contentTextComponent);
 
 
-    add(LineHint(block: 'block', bettingOdds: '3', lines: '3'));
+    add(LineHint(block: 'block', bettingOdds: bettingOdds, lines: '3',score: score));
 
     super.onLoad();
   }

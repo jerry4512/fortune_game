@@ -28,13 +28,8 @@ class MarqueeText extends PositionComponent with TapCallbacks{
     spriteComponent = SpriteComponent(sprite: await Sprite.load( 'marquees/marquee_text_1.png'));
     effectController = RepeatedEffectController(LinearEffectController(15), 5);
 
-    // effectController = EffectController(duration: 10);
-
     moveEffect = MoveEffect.to(Vector2(spriteComponent.position.x -1400, spriteComponent.position.y),
         effectController);
-
-    // moveEffect = MoveEffect.to(Vector2(spriteComponent.position.x -500, spriteComponent.position.y),
-    //     effectController);
     spriteComponent.add(moveEffect);
 
 
@@ -53,9 +48,7 @@ class MarqueeText extends PositionComponent with TapCallbacks{
 
   @override
   void update(double dt) {
-    // if(effectController.completed){
-    //   changeMarqueeText();
-    // }
+
   }
 
   Future<void> changeMarqueeText() async {
@@ -72,11 +65,6 @@ class MarqueeText extends PositionComponent with TapCallbacks{
     clipComponent = ClipComponent.rectangle(anchor: Anchor.topCenter,position: Vector2(200,10), size: Vector2(400, 290), children: components);
     add(clipComponent);
 
-    // effectController = EffectController(duration: 10);
-    // moveEffect = MoveEffect.to(Vector2(spriteComponent.position.x -1400, spriteComponent.position.y),
-    //     effectController);
-    // spriteComponent.add(moveEffect);
-
   }
 
   void getMarqueeText(){
@@ -84,7 +72,6 @@ class MarqueeText extends PositionComponent with TapCallbacks{
     List<String> defaultMarqueeTextList = SymbolBlocks().marqueeText;
     int index = random.nextInt(defaultMarqueeTextList.length);
     marqueeText = defaultMarqueeTextList[index];
-
   }
 
 }

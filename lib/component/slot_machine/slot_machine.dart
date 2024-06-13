@@ -17,6 +17,7 @@ import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
 import 'package:fortune_game/component/button/spin_button.dart';
 import 'package:fortune_game/component/system_alert/big_win.dart';
 import 'package:fortune_game/component/system_alert/frame_win_bg.dart';
+import 'package:fortune_game/component/system_alert/line_hint.dart';
 import 'package:fortune_game/component/system_alert/mega_win.dart';
 import 'package:fortune_game/component/system_alert/super_win.dart';
 import 'package:fortune_game/component/system_alert/system_alert.dart';
@@ -242,6 +243,8 @@ class SlotMachine extends PositionComponent {
       position: Vector2(0, 343),
     );
     add(balanceTextComponent);
+
+    // add(LineHint(block: 'block', bettingOdds: '1', lines: '3', score:'100'));
 
     super.onLoad();
   }
@@ -511,10 +514,10 @@ class SlotMachine extends PositionComponent {
         slotMachineBlocksThirdRoller.position = Vector2(-276, -96);
         break;
       case RollerType.magnificationRoller:
+        rollerState = RollerState.stopped;
         magnificationMoveEffect.reset();
         slotMachineMagnificationRoller.refreshBlocks();
         slotMachineMagnificationRoller.position = Vector2(200,-100);
-        rollerState = RollerState.stopped;
         checkWin();
         if(isContinuousSpinning){
           Future.delayed(const Duration(seconds: 1), () {
@@ -532,7 +535,6 @@ class SlotMachine extends PositionComponent {
       List<SlotMachineRollerBlock> slotMachineSecondRollerBlocks = slotMachineBlocksSecondRoller.blocksRoller;
       List<SlotMachineRollerBlock> slotMachineThirdRollerBlocks = slotMachineBlocksThirdRoller.blocksRoller;
       List<SlotMachineRollerBlock> slotMachineMagnificationRollerBlocks = slotMachineMagnificationRoller.blocksRoller;
-
 
       //判断横向是否有连线
       for(int i = 2;i<blocksRollerFirst.length;i++){
@@ -796,23 +798,21 @@ class SlotMachine extends PositionComponent {
     }
   }
 
-  void showWinHint(String content){
-    frameWinBg = FrameWinBg(content: roundWinPoints);
+  //显示获胜提示
+  void showWinHint(String score){
+    frameWinBg = FrameWinBg(score: roundWinPoints, bettingOdds: bettingAmount);
     add(frameWinBg);
-
-    // add(LineHint(bettingOdds:"20",lines: "5"));
-
     Future.delayed(const Duration(seconds: 3), () {
       remove(frameWinBg);
-      bigWin = BigWin();
+      bigWin = BigWin(score: score);
       add(bigWin);
       Future.delayed(const Duration(seconds: 3), () {
         remove(bigWin);
-        megaWin = MegaWin();
+        megaWin = MegaWin(score: score);
         add(megaWin);
         Future.delayed(const Duration(seconds: 3), () {
           remove(megaWin);
-          superWin = SuperWin();
+          superWin = SuperWin(score: score);
           add(superWin);
           Future.delayed(const Duration(seconds: 3), () {
             remove(superWin);

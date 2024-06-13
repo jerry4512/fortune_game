@@ -69,4 +69,25 @@ class SymbolBlocks {
     'magnifications/magnification_15x.png' : 15,
   };
 
+
+  List winLineHintBlocks = [
+    'win_line_hint_blocks/line_hint_h1.png',
+    'win_line_hint_blocks/line_hint_h2.png',
+    'win_line_hint_blocks/line_hint_h3.png',
+    'win_line_hint_blocks/line_hint_n1.png',
+    'win_line_hint_blocks/line_hint_n2.png',
+    'win_line_hint_blocks/line_hint_n3.png',
+    'win_line_hint_blocks/line_hint_n4.png',
+    'win_line_hint_blocks/line_hint_wild.png',
+  ];
+
+  List winLineHintMagnifications = [
+    'win_line_hint_blocks/line_hint_1x.png',
+    'win_line_hint_blocks/line_hint_2x.png',
+    'win_line_hint_blocks/line_hint_3x.png',
+    'win_line_hint_blocks/line_hint_5x.png',
+    'win_line_hint_blocks/line_hint_10x.png',
+    'win_line_hint_blocks/line_hint_15x.png',
+  ];
+
 }
