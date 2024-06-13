@@ -1,11 +1,10 @@
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:fortune_game/component/slot_machine/slot_machine.dart';
 /// 遊戲本體，據說繼承 SingleGameInstance 會有一些效能好處??
 /// https://docs.flame-engine.org/latest/flame/game.html
-class FortuneGame extends FlameGame with TapDetector {
+class FortuneGame extends FlameGame  {
 
   SlotMachine? slotMachine;
 

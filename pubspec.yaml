@@ -63,6 +63,8 @@ flutter:
     - assets/images/buttons/
     - assets/images/marquees/
     - assets/images/lines/
+    - assets/images/win_hint/
+    - assets/images/win_line_hint_blocks/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

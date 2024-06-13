@@ -6,7 +6,7 @@ typedef OnTap = void Function();
 
 class SettingButton extends SpriteComponent with TapCallbacks{
   final OnTap onTap;
-  SettingButton({required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(-270,210), size: Vector2(50,50));
+  SettingButton({required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(-270,280), size: Vector2(50,50));
 
   late SpriteComponent menuSpriteComponent;
   bool isMenuOpen = false;

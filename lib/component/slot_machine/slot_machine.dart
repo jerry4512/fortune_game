@@ -6,6 +6,7 @@ import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:fortune_game/component/button/auto_spin_button.dart';
 import 'package:fortune_game/component/button/bet_button.dart';
+import 'package:fortune_game/component/button/ex_bg_button.dart';
 import 'package:fortune_game/component/button/ex_button.dart';
 import 'package:fortune_game/component/button/quick_start_button.dart';
 import 'package:fortune_game/component/button/setting_button.dart';
@@ -14,6 +15,12 @@ import 'package:fortune_game/component/roller/slot_machine_blocks_roller.dart';
 import 'package:fortune_game/component/roller/slot_machine_magnification_roller.dart';
 import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
 import 'package:fortune_game/component/button/spin_button.dart';
+import 'package:fortune_game/component/system_alert/big_win.dart';
+import 'package:fortune_game/component/system_alert/frame_win_bg.dart';
+import 'package:fortune_game/component/system_alert/mega_win.dart';
+import 'package:fortune_game/component/system_alert/super_win.dart';
+import 'package:fortune_game/component/system_alert/system_alert.dart';
+import 'package:fortune_game/symbol/calculate/calculate_win.dart';
 import 'package:fortune_game/symbol/enum.dart';
 import 'package:fortune_game/symbol/symbol_blocks.dart';
 
@@ -40,6 +47,9 @@ class SlotMachine extends PositionComponent {
   late MoveEffect thirdMoveEffect;
   late MoveEffect magnificationMoveEffect;
 
+  late MoveEffect exButtonOpenMoveEffect;
+  late MoveEffect exButtonCloseMoveEffect;
+
   late List<Component> firstComponents;
   late List<Component> secondComponents;
   late List<Component> thirdComponents;
@@ -55,6 +65,9 @@ class SlotMachine extends PositionComponent {
   late EffectController slotMachineBlocksRollerThirdEffectController;
   late EffectController slotMachineMagnificationRollerEffectController;
 
+  late EffectController eXButtonOpenEffectController;
+  late EffectController eXButtonCloseEffectController;
+
   late SpriteComponent winFirstRowLine;
   late SpriteComponent winSecondRowLine;
   late SpriteComponent winThirdRowLine;
@@ -68,7 +81,43 @@ class SlotMachine extends PositionComponent {
   //是否是连续转动
   bool isContinuousSpinning = false;
 
-  String balance = '99999';
+  //统计每回合连线成功获得分数
+  List<int> getPointsList = [];
+
+  //初始下注金额
+  String bettingAmount = '3';
+
+  //初始余额
+  String balance = '2000';
+
+  //每回合获得的金币
+  String roundWinPoints = '0';
+
+  late TextComponent roundWinPointsTextComponent;
+
+  late TextComponent balanceTextComponent;
+
+  bool isWin = false;
+
+  //系统讯息（馀额不足）
+  late SpriteComponent systemAlert;
+
+  late SpriteComponent autoSpinButton;
+
+  bool isQuickSpinning = false;
+
+  bool isOpenExButton = false;
+  late SpriteComponent exBgSpriteComponent;
+
+  //ex标签
+  late SpriteComponent exTag;
+
+  late SpriteComponent frameWinBg;
+
+  ///假色块模动囃
+  late PositionComponent bigWin;
+  late PositionComponent megaWin;
+  late PositionComponent superWin;
 
   @override
   Future<void> onLoad() async {
@@ -83,9 +132,18 @@ class SlotMachine extends PositionComponent {
     add(slotMachineFrame);
 
     //拉霸机上面bar上分的Ex
-    add(ExButton(onTap: (){
-
+    add(ExButton(onTap: () {
+      isOpenExButton = !isOpenExButton;
+      if(isOpenExButton){
+        openExButton();
+      }else{
+        closeExButton();
+      }
     }));
+
+    //拉霸机上面bar上分的Ex背景
+    List<Component> list = [exBgSpriteComponent];
+    add(ClipComponent.rectangle(position: Vector2(-110,-180),size: Vector2(290, 50),anchor: Anchor.bottomCenter,children: list));
 
     //拉霸机上面的bar
     add(SpriteComponent(
@@ -109,11 +167,10 @@ class SlotMachine extends PositionComponent {
     //拉霸机底部
     add(SpriteComponent(
       sprite: await Sprite.load('bottom.png'),
-      size: Vector2(730,100),
+      size: Vector2(730,200),
       position: Vector2(0,200),
       anchor: Anchor.topCenter,
     ));
-
 
     clipComponentFirst = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(-135,-100), size: Vector2(143, 290), children: firstComponents);
     clipComponentSecond = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(7,-100), size: Vector2(143, 290), children: secondComponents);
@@ -128,65 +185,89 @@ class SlotMachine extends PositionComponent {
     clipComponentMagnification = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(275,-100), size: Vector2(130, 300), children: magnificationComponents);
     add(clipComponentMagnification);
 
+    //倍率行方块框
+    add(SpriteComponent(
+      sprite: await Sprite.load('block_frame.png'),
+      size: Vector2(145,115),
+      position: Vector2(205, 0),
+      anchor: Anchor.topCenter,
+    ));
+
     //设定按钮
     add(SettingButton(onTap: (){
-      print('下注按钮');
+      print('设定按钮');
     }));
 
     //下注按钮
-    add(BetButton(onTap: (){
-      print('下注按钮');
+    add(BetButton(onTap: (betNumber){
+      bettingAmount = betNumber;
+      print('下注金额：$betNumber');
     }));
+
+    //WIN(每局获得的金币)
+    add(TextComponent(
+      anchor: Anchor.topCenter,
+      text: 'WIN',
+        textRenderer: TextPaint(
+            style : const TextStyle(
+                fontSize: 33,
+                color: Colors.amber
+            )
+        ),
+      position: Vector2(-90, 213),
+    ));
+
+    add(roundWinPointsTextComponent);
 
     //开始转动按钮
     add(SpinButton(onTap: (){
       if(rollerState == RollerState.stopped && !isContinuousSpinning){
-        print('单次转动');
         startSpinning();
       }
     }));
 
     //连续转动按钮
-    add(AutoSpinButton(onTap: (){
-      print('连续转动');
-      if(isContinuousSpinning){
-        isContinuousSpinning = false;
-        stopSpinning(RollerType.firstRoller);
-        stopSpinning(RollerType.secondRoller);
-        stopSpinning(RollerType.thirdRoller);
-        stopSpinning(RollerType.magnificationRoller);
-      }else{
-        isContinuousSpinning = true;
-        startSpinning();
-      }
-    }));
+    add(autoSpinButton);
 
     //快速开始
     add(QuickStartButton(onTap: (){
       print('快速开始');
     }));
 
-    add(TextComponent(
+    //余额显示
+    balanceTextComponent = TextComponent(
       anchor: Anchor.topCenter,
       text: 'Balance  $balance',
       scale: Vector2(0.8,0.8),
-      position: Vector2(0, 273),
-    ));
-
-    // add(SpriteComponent(
-    //     sprite: await Sprite.load('bet_options_frame.png')
-    // ));
+      position: Vector2(0, 343),
+    );
+    add(balanceTextComponent);
 
     super.onLoad();
   }
 
   //初始化
   Future<void> init() async {
+    exBgSpriteComponent = ExBgButton(onTap: (value){
+      if(value){
+        // add(fakeRectangle);
+        add(exTag);
+        // Future.delayed(const Duration(seconds: 3), () {
+        //   remove(fakeRectangle);
+        // });
+      }else{
+        remove(exTag);
+      }
+    });
+
     //初始化EffectController
     slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), 3);
     slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), 6);
     slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), 9);
     slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), 12);
+
+    eXButtonOpenEffectController = LinearEffectController(0.55);
+    eXButtonCloseEffectController = LinearEffectController(0.55);
 
     //方块行放入一个List，方便之后操作
     rollersList.add(blocksRollerFirst);
@@ -237,6 +318,45 @@ class SlotMachine extends PositionComponent {
         position: Vector2(-300,-70)
     );
     winLines = [winFirstRowLine,winSecondRowLine,winThirdRowLine,winForthRowLine,windFifthRowLine];
+
+    systemAlert = SystemAlert(onTap: (){
+      remove(systemAlert);
+    });
+
+    autoSpinButton = AutoSpinButton(isQuickSpinning: isQuickSpinning,onTap: (){
+      print('连续转动');
+      if(isContinuousSpinning){
+        isContinuousSpinning = false;
+        stopSpinning(RollerType.firstRoller);
+        stopSpinning(RollerType.secondRoller);
+        stopSpinning(RollerType.thirdRoller);
+        stopSpinning(RollerType.magnificationRoller);
+      }else{
+        isContinuousSpinning = true;
+        startSpinning();
+      }
+    });
+
+    roundWinPointsTextComponent = TextComponent(
+      anchor: Anchor.topCenter,
+      text: roundWinPoints,
+      textRenderer: TextPaint(
+          style : const TextStyle(
+              fontSize: 33,
+              fontWeight: FontWeight.bold,
+              color: Colors.white
+          )
+      ),
+      position: Vector2(0, 213),
+    );
+
+    exTag = SpriteComponent(
+        sprite: await Sprite.load('buttons/ex_button.png'),
+        anchor: Anchor.centerLeft,
+        size: Vector2(45,30),
+      position: Vector2(120,55)
+    );
+
   }
 
   @override
@@ -253,6 +373,34 @@ class SlotMachine extends PositionComponent {
         stopSpinning(RollerType.magnificationRoller);
       }
     }
+
+    if(eXButtonOpenEffectController.completed){
+      restExcButtonEffect(exButtonOpenMoveEffect);
+    }
+
+    if(eXButtonCloseEffectController.completed){
+      restExcButtonEffect(exButtonCloseMoveEffect);
+    }
+  }
+
+  void restExcButtonEffect(MoveEffect moveEffect){
+    moveEffect.reset();
+  }
+
+  //打开Ex按钮
+  Future<void> openExButton() async {
+    exButtonOpenMoveEffect = MoveEffect.to(
+        Vector2(exBgSpriteComponent.position.x+203, exBgSpriteComponent.position.y),
+        eXButtonOpenEffectController);
+    exBgSpriteComponent.add(exButtonOpenMoveEffect);
+  }
+
+  //关闭Ex按钮
+  Future<void> closeExButton() async {
+    exButtonCloseMoveEffect = MoveEffect.to(
+        Vector2(exBgSpriteComponent.position.x-203, exBgSpriteComponent.position.y),
+        eXButtonCloseEffectController);
+    exBgSpriteComponent.add(exButtonCloseMoveEffect);
   }
 
   @override
@@ -279,7 +427,7 @@ class SlotMachine extends PositionComponent {
       // 获取这个索引对应的图片并添加到列表中
       var block = SlotMachineRollerBlock(
         image: defaultBlocksImageList[index],
-        // image:  'blocks/symbol_07.png',
+        // image:  'blocks/symbol_wild.png',
         anchor: Anchor.topCenter,
         position: positions[i],
         blockType: blockType,
@@ -291,35 +439,47 @@ class SlotMachine extends PositionComponent {
 
   //开始转动
   void startSpinning(){
-    print('开始转动');
-    //移除所有winLine
-    for(int i = 0;i<winLines.length;i++){
-     if(winLines[i].isMounted){
-       remove(winLines[i]);
-     }
+    if(int.parse(bettingAmount) <= int.parse(balance)){
+      roundWinPoints = '0';
+      resetRoundWinComponents();
+      print('单次转动');
+      print('开始转动');
+      //移除所有winLine
+      for(int i = 0;i<winLines.length;i++){
+        if(winLines[i].isMounted){
+          remove(winLines[i]);
+        }
+      }
+      isWin = false;
+      getPointsList = [];
+      rollerState = RollerState.rolling;
+      firstMoveEffect = MoveEffect.to(
+          Vector2(slotMachineBlocksFirstRoller.position.x, slotMachineBlocksFirstRoller.position.y + 200),
+          slotMachineBlocksRollerFirstEffectController);
+      slotMachineBlocksFirstRoller.add(firstMoveEffect);
+
+      secondMoveEffect = MoveEffect.to(
+          Vector2(slotMachineBlocksSecondRoller.position.x, slotMachineBlocksSecondRoller.position.y + 200),
+          slotMachineBlocksRollerSecondEffectController);
+      slotMachineBlocksSecondRoller.add(secondMoveEffect);
+
+      thirdMoveEffect = MoveEffect.to(
+          Vector2(slotMachineBlocksThirdRoller.position.x, slotMachineBlocksThirdRoller.position.y + 200),
+          slotMachineBlocksRollerThirdEffectController);
+      slotMachineBlocksThirdRoller.add(thirdMoveEffect);
+
+      magnificationMoveEffect = MoveEffect.to(
+          Vector2(slotMachineMagnificationRoller.position.x, slotMachineMagnificationRoller.position.y + 200),
+          slotMachineMagnificationRollerEffectController);
+      slotMachineMagnificationRoller.add(magnificationMoveEffect);
+    }else{
+      //馀额不足
+      isQuickSpinning = false;
+      isContinuousSpinning = false;
+      remove(autoSpinButton);
+      add(systemAlert);
+      add(autoSpinButton);
     }
-    rollerState = RollerState.rolling;
-    firstMoveEffect = MoveEffect.to(
-        Vector2(slotMachineBlocksFirstRoller.position.x, slotMachineBlocksFirstRoller.position.y + 200),
-        slotMachineBlocksRollerFirstEffectController);
-    slotMachineBlocksFirstRoller.add(firstMoveEffect);
-
-    secondMoveEffect = MoveEffect.to(
-        Vector2(slotMachineBlocksSecondRoller.position.x, slotMachineBlocksSecondRoller.position.y + 200),
-        slotMachineBlocksRollerSecondEffectController);
-    slotMachineBlocksSecondRoller.add(secondMoveEffect);
-
-    thirdMoveEffect = MoveEffect.to(
-        Vector2(slotMachineBlocksThirdRoller.position.x, slotMachineBlocksThirdRoller.position.y + 200),
-        slotMachineBlocksRollerThirdEffectController);
-    slotMachineBlocksThirdRoller.add(thirdMoveEffect);
-
-    magnificationMoveEffect = MoveEffect.to(
-        Vector2(slotMachineMagnificationRoller.position.x, slotMachineMagnificationRoller.position.y + 200),
-        slotMachineMagnificationRollerEffectController);
-    slotMachineMagnificationRoller.add(magnificationMoveEffect);
-
-
   }
 
   //停止转动
@@ -365,17 +525,21 @@ class SlotMachine extends PositionComponent {
     }
   }
 
+  //检查是否获胜
   void checkWin(){
     for(int i =2;i<blocksRollerFirst.length;i++){
       List<SlotMachineRollerBlock> slotMachineFirstRollerBlocks = slotMachineBlocksFirstRoller.blocksRoller;
       List<SlotMachineRollerBlock> slotMachineSecondRollerBlocks = slotMachineBlocksSecondRoller.blocksRoller;
       List<SlotMachineRollerBlock> slotMachineThirdRollerBlocks = slotMachineBlocksThirdRoller.blocksRoller;
+      List<SlotMachineRollerBlock> slotMachineMagnificationRollerBlocks = slotMachineMagnificationRoller.blocksRoller;
+
 
       //判断横向是否有连线
       for(int i = 2;i<blocksRollerFirst.length;i++){
         String firstBlockImage = slotMachineFirstRollerBlocks[i].image;
         String secondBlockImage = slotMachineSecondRollerBlocks[i].image;
         String thirdBlockImage = slotMachineThirdRollerBlocks[i].image;
+        String magnificationBlockImage = slotMachineMagnificationRollerBlocks[i].image;
         print('----$i----');
         print(firstBlockImage);
         print(secondBlockImage);
@@ -384,72 +548,114 @@ class SlotMachine extends PositionComponent {
           print('----横向有相同----');
           if(i == 2){
             add(winFirstRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else if(i == 3){
             add(winSecondRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else{
             add(winThirdRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }
         }
         //特殊老虎方块有一个
-        if(firstBlockImage == secondBlockImage && 'blocks/symbol_07.png' == thirdBlockImage){
+        if(firstBlockImage == secondBlockImage && 'blocks/symbol_wild.png' == thirdBlockImage){
           print('----横向有相同(特殊老虎方块一个)----');
           if(i == 2){
             add(winFirstRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else if(i == 3){
             add(winSecondRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else{
             add(winThirdRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }
         }
-        if(secondBlockImage == thirdBlockImage  && 'blocks/symbol_07.png' == firstBlockImage ){
+        if(secondBlockImage == thirdBlockImage  && 'blocks/symbol_wild.png' == firstBlockImage ){
           print('----横向有相同(特殊老虎方块一个)----');
           if(i == 2){
             add(winFirstRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else if(i == 3){
             add(winSecondRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else{
             add(winThirdRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }
         }
-        if(firstBlockImage == thirdBlockImage  && 'blocks/symbol_07.png' == secondBlockImage){
+        if(firstBlockImage == thirdBlockImage  && 'blocks/symbol_wild.png' == secondBlockImage){
           print('----横向有相同(特殊老虎方块一个)----');
           if(i == 2){
             add(winFirstRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else if(i == 3){
             add(winSecondRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else{
             add(winThirdRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }
         }
         //特殊老虎方块有两个
-        if(firstBlockImage == secondBlockImage  && 'blocks/symbol_07.png' == firstBlockImage){
+        if(firstBlockImage == secondBlockImage  && 'blocks/symbol_wild.png' == firstBlockImage){
           print('----横向有相同(特殊老虎方块两块)----');
           if(i == 2){
             add(winFirstRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else if(i == 3){
             add(winSecondRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else{
             add(winThirdRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }
         }
-        if(firstBlockImage == thirdBlockImage  && 'blocks/symbol_07.png' == firstBlockImage){
+        if(firstBlockImage == thirdBlockImage  && 'blocks/symbol_wild.png' == firstBlockImage){
           print('----横向有相同(特殊老虎方块两块)----');
           if(i == 2){
             add(winFirstRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else if(i == 3){
             add(winSecondRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else{
             add(winThirdRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }
         }
-        if(secondBlockImage == thirdBlockImage  && 'blocks/symbol_07.png' == secondBlockImage){
+        if(secondBlockImage == thirdBlockImage  && 'blocks/symbol_wild.png' == secondBlockImage){
           print('----横向有相同(特殊老虎方块两块)----');
           if(i == 2){
             add(winFirstRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else if(i == 3){
             add(winSecondRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }else{
             add(winThirdRowLine);
+            isWin = true;
+            getPointsList.add(CalculateWin().getPoints(firstBlockImage, secondBlockImage, thirdBlockImage, magnificationBlockImage, bettingAmount));
           }
         }
       }
@@ -460,72 +666,205 @@ class SlotMachine extends PositionComponent {
       String secondCenterBlockImage = slotMachineSecondRollerBlocks[3].image;
       String thirdSecondBlockImage = slotMachineThirdRollerBlocks[2].image;
       String thirdForthBlockImage = slotMachineThirdRollerBlocks[4].image;
+      String secondMagnificationBlockImage =slotMachineMagnificationRollerBlocks[2].image;
+      String thirdMagnificationBlockImage =slotMachineMagnificationRollerBlocks[4].image;
+
       if(firstSecondBlockImage == secondCenterBlockImage && firstSecondBlockImage == thirdForthBlockImage){
         print('----左上右下斜向有相同----');
         add(winForthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstSecondBlockImage, secondCenterBlockImage, thirdForthBlockImage, thirdMagnificationBlockImage, bettingAmount));
       }
       if(firstForthBlockImage == secondCenterBlockImage && firstForthBlockImage == thirdSecondBlockImage){
         print('----左下右上斜向有相同----');
         add(windFifthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstForthBlockImage, secondCenterBlockImage, thirdSecondBlockImage, secondMagnificationBlockImage, bettingAmount));
+
       }
       //特殊老虎方块有一个
-      if(firstSecondBlockImage == secondCenterBlockImage && 'blocks/symbol_07.png' == thirdForthBlockImage){
+      if(firstSecondBlockImage == secondCenterBlockImage && 'blocks/symbol_wild.png' == thirdForthBlockImage){
         print('----左上右下斜向有相同(特殊老虎方块一个)----');
         add(winForthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstSecondBlockImage, secondCenterBlockImage, thirdForthBlockImage, thirdMagnificationBlockImage, bettingAmount));
       }
-      if(firstSecondBlockImage == thirdForthBlockImage && 'blocks/symbol_07.png' == secondCenterBlockImage){
+      if(firstSecondBlockImage == thirdForthBlockImage && 'blocks/symbol_wild.png' == secondCenterBlockImage){
         print('----左上右下斜向有相同(特殊老虎方块一个)----');
         add(winForthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstSecondBlockImage, secondCenterBlockImage, thirdForthBlockImage, thirdMagnificationBlockImage, bettingAmount));
       }
-      if(secondCenterBlockImage == thirdForthBlockImage && 'blocks/symbol_07.png' == firstSecondBlockImage){
+      if(secondCenterBlockImage == thirdForthBlockImage && 'blocks/symbol_wild.png' == firstSecondBlockImage){
         print('----左上右下斜向有相同(特殊老虎方块一个)----');
         add(winForthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstSecondBlockImage, secondCenterBlockImage, thirdForthBlockImage, thirdMagnificationBlockImage, bettingAmount));
       }
-      if(firstForthBlockImage == secondCenterBlockImage && 'blocks/symbol_07.png'  == thirdSecondBlockImage){
+      if(firstForthBlockImage == secondCenterBlockImage && 'blocks/symbol_wild.png'  == thirdSecondBlockImage){
         print('----左下右上斜向有相同(特殊老虎方块一个)----');
         add(windFifthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstForthBlockImage, secondCenterBlockImage, thirdSecondBlockImage, thirdMagnificationBlockImage, bettingAmount));
       }
-      if(firstForthBlockImage == thirdSecondBlockImage && 'blocks/symbol_07.png' == secondCenterBlockImage){
+      if(firstForthBlockImage == thirdSecondBlockImage && 'blocks/symbol_wild.png' == secondCenterBlockImage){
         print('----左下右上斜向有相同(特殊老虎方块一个)----');
         add(windFifthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstForthBlockImage, secondCenterBlockImage, thirdSecondBlockImage, thirdMagnificationBlockImage, bettingAmount));
       }
-      if(secondCenterBlockImage == thirdSecondBlockImage && 'blocks/symbol_07.png' == firstForthBlockImage){
+      if(secondCenterBlockImage == thirdSecondBlockImage && 'blocks/symbol_wild.png' == firstForthBlockImage){
         print('----左下右上斜向有相同(特殊老虎方块一个)----');
         add(windFifthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstForthBlockImage, secondCenterBlockImage, thirdSecondBlockImage, thirdMagnificationBlockImage, bettingAmount));
       }
       //特殊老虎方块有两个
-      if(firstSecondBlockImage == secondCenterBlockImage && firstSecondBlockImage == 'blocks/symbol_07.png'){
+      if(firstSecondBlockImage == secondCenterBlockImage && firstSecondBlockImage == 'blocks/symbol_wild.png'){
         print('----左上右下斜向有相同(特殊老虎方块两块)----');
         add(winForthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstSecondBlockImage, secondCenterBlockImage, thirdForthBlockImage, thirdMagnificationBlockImage, bettingAmount));
       }
-      if(secondCenterBlockImage == thirdForthBlockImage && secondCenterBlockImage == 'blocks/symbol_07.png'){
+      if(secondCenterBlockImage == thirdForthBlockImage && secondCenterBlockImage == 'blocks/symbol_wild.png'){
         print('----左上右下斜向有相同(特殊老虎方块两块)----');
         add(winForthRowLine);
-      }
-      if(firstSecondBlockImage == thirdForthBlockImage && firstSecondBlockImage == 'blocks/symbol_07.png'){
-        print('----左上右下斜向有相同(特殊老虎方块两块)----');
-        add(winForthRowLine);
-      }
-      if(firstForthBlockImage == secondCenterBlockImage && firstForthBlockImage == 'blocks/symbol_07.png'){
-        print('----左下右上斜向有相同(特殊老虎方块两块)----');
-        add(windFifthRowLine);
-      }
-      if(secondCenterBlockImage == thirdSecondBlockImage && secondCenterBlockImage == 'blocks/symbol_07.png'){
-        print('----左下右上斜向有相同(特殊老虎方块两块)----');
-        add(windFifthRowLine);
-      }
-      if(firstForthBlockImage == thirdSecondBlockImage && firstForthBlockImage == 'blocks/symbol_07.png'){
-        print('----左下右上斜向有相同(特殊老虎方块两块)----');
-        add(windFifthRowLine);
-      }
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstSecondBlockImage, secondCenterBlockImage, thirdForthBlockImage, thirdMagnificationBlockImage, bettingAmount));
 
-
+      }
+      if(firstSecondBlockImage == thirdForthBlockImage && firstSecondBlockImage == 'blocks/symbol_wild.png'){
+        print('----左上右下斜向有相同(特殊老虎方块两块)----');
+        add(winForthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstSecondBlockImage, secondCenterBlockImage, thirdForthBlockImage, thirdMagnificationBlockImage, bettingAmount));
+      }
+      if(firstForthBlockImage == secondCenterBlockImage && firstForthBlockImage == 'blocks/symbol_wild.png'){
+        print('----左下右上斜向有相同(特殊老虎方块两块)----');
+        add(windFifthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstForthBlockImage, secondCenterBlockImage, thirdSecondBlockImage, thirdMagnificationBlockImage, bettingAmount));
+      }
+      if(secondCenterBlockImage == thirdSecondBlockImage && secondCenterBlockImage == 'blocks/symbol_wild.png'){
+        print('----左下右上斜向有相同(特殊老虎方块两块)----');
+        add(windFifthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstForthBlockImage, secondCenterBlockImage, thirdSecondBlockImage, thirdMagnificationBlockImage, bettingAmount));
+      }
+      if(firstForthBlockImage == thirdSecondBlockImage && firstForthBlockImage == 'blocks/symbol_wild.png'){
+        print('----左下右上斜向有相同(特殊老虎方块两块)----');
+        add(windFifthRowLine);
+        isWin = true;
+        getPointsList.add(CalculateWin().getPoints(firstForthBlockImage, secondCenterBlockImage, thirdSecondBlockImage, thirdMagnificationBlockImage, bettingAmount));
+      }
     }
 
 
+    if(!isWin){
+      //没有获胜，扣除投注金额
+      print('没有获胜');
+      balance = (int.parse(balance) - int.parse(bettingAmount)).toString();
+      print('balance:$balance');
+      remove(balanceTextComponent);
+      balanceTextComponent = TextComponent(
+        anchor: Anchor.topCenter,
+        text: 'Balance  $balance',
+        scale: Vector2(0.8,0.8),
+        position: Vector2(0, 343),
+      );
+      add(balanceTextComponent);
+    }else{
+      //获胜，加上奖励金额
+      print('获胜');
+      remove(balanceTextComponent);
+      int result = 0;
+      for(int i = 0;i<getPointsList.length;i++){
+        result = result+getPointsList[i];
+      }
+      roundWinPoints = result.toString();
+      showWinHint(roundWinPoints);
+      resetRoundWinComponents();
+      balance = (int.parse(balance) + result).toString();
+      print('balance:$balance');
+      balanceTextComponent = TextComponent(
+        anchor: Anchor.topCenter,
+        text: 'Balance  $balance',
+        scale: Vector2(0.8,0.8),
+        position: Vector2(0, 343),
+      );
+      add(balanceTextComponent);
+    }
+  }
 
+  void showWinHint(String content){
+    frameWinBg = FrameWinBg(content: roundWinPoints);
+    add(frameWinBg);
 
+    // add(LineHint(bettingOdds:"20",lines: "5"));
 
+    Future.delayed(const Duration(seconds: 3), () {
+      remove(frameWinBg);
+      bigWin = BigWin();
+      add(bigWin);
+      Future.delayed(const Duration(seconds: 3), () {
+        remove(bigWin);
+        megaWin = MegaWin();
+        add(megaWin);
+        Future.delayed(const Duration(seconds: 3), () {
+          remove(megaWin);
+          superWin = SuperWin();
+          add(superWin);
+          Future.delayed(const Duration(seconds: 3), () {
+            remove(superWin);
+          });
+        });
+      });
+    });
+  }
+
+  void resetRoundWinComponents(){
+    remove(roundWinPointsTextComponent);
+    roundWinPointsTextComponent = TextComponent(
+      anchor: Anchor.topCenter,
+      text: roundWinPoints,
+      textRenderer: TextPaint(
+          style : const TextStyle(
+              fontSize: 33,
+              fontWeight: FontWeight.bold,
+              color: Colors.white
+          )
+      ),
+      position: Vector2(0, 213),
+    );
+    add(roundWinPointsTextComponent);
+  }
+
+  //测试连线后遮罩效果
+  void test(){
+    List list1 = slotMachineBlocksFirstRoller.blocksRoller;
+    for(int i = 0;i<list1.length;i++){
+      SlotMachineRollerBlock block = list1[i];
+      print(block);
+      block.add(RectangleComponent(
+        position:Vector2(0,0),
+          size: Vector2(174,100), paint: Paint()..color = Colors.black.withOpacity(0.3)));
+    }
+
+    List list2 = slotMachineBlocksSecondRoller.blocksRoller;
+    for(int i =0;i<list2.length;i++){
+      SlotMachineRollerBlock block = list2[i];
+      block.add(RectangleComponent(
+          position:Vector2(0,0),
+          size: Vector2(174,100), paint: Paint()..color = Colors.black.withOpacity(0.3)));
+    }
+
+    List list3= slotMachineBlocksThirdRoller.blocksRoller;
+    for(int i =0;i<list3.length;i++){
+      SlotMachineRollerBlock block = list3[i];
+      block.add(RectangleComponent(
+          position:Vector2(0,0),
+          size: Vector2(174,100), paint: Paint()..color = Colors.black.withOpacity(0.3)));
+    }
   }
 
 }

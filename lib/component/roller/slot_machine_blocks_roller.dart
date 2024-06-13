@@ -1,7 +1,9 @@
 
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
 import 'package:fortune_game/symbol/enum.dart';
 import 'package:fortune_game/symbol/symbol_blocks.dart';
@@ -16,6 +18,8 @@ class SlotMachineBlocksRoller extends PositionComponent{
 
   List<SlotMachineRollerBlock> newBlocks = [];
 
+  late RectangleComponent rectangleComponent;
+
   @override
   void onLoad() async {
     for(int i = 0 ; i < blocksRoller.length; i++){
@@ -23,6 +27,9 @@ class SlotMachineBlocksRoller extends PositionComponent{
     }
     addAll(components);
     //遮罩
+    //
+    // rectangleComponent = RectangleComponent(position: position, size: Vector2(1370, 970), anchor: Anchor.center, paint: Paint()..color = Colors.black.withOpacity(0.5),priority: 2);
+    // add(rectangleComponent);
     // add(ClipComponent.rectangle(anchor: Anchor.topCenter,position: Vector2(-200,-95), size: Vector2(143, 290), children: components));
     super.onLoad();
   }

@@ -6,11 +6,11 @@ typedef OnTap = void Function();
 
 class AutoSpinButton extends SpriteComponent with TapCallbacks{
   final OnTap onTap;
+  late final bool isQuickSpinning;
 
 
-  AutoSpinButton({required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(100,210), size: Vector2(50,50));
+  AutoSpinButton({required this.isQuickSpinning, required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(100,280), size: Vector2(50,50));
 
-  late bool isQuickSpinning = false;
   EffectController? effectController ;
   @override
   void onLoad() async {

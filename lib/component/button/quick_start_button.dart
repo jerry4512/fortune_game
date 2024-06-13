@@ -8,7 +8,7 @@ class QuickStartButton extends SpriteComponent with TapCallbacks{
   final OnTap onTap;
 
 
-  QuickStartButton({required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(170,210), size: Vector2(50,50));
+  QuickStartButton({required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(170,280), size: Vector2(50,50));
 
 
   bool isOn = false;
