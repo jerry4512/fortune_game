@@ -263,6 +263,19 @@ class SlotMachine extends PositionComponent {
       }
     });
 
+    roundWinPointsTextComponent = TextComponent(
+      anchor: Anchor.topCenter,
+      text: roundWinPoints,
+      textRenderer: TextPaint(
+          style : const TextStyle(
+              fontSize: 33,
+              fontWeight: FontWeight.bold,
+              color: Colors.white
+          )
+      ),
+      position: Vector2(0, 213),
+    );
+
     //初始化EffectController
     slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), 3);
     slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), 6);
@@ -339,19 +352,6 @@ class SlotMachine extends PositionComponent {
         startSpinning();
       }
     });
-
-    roundWinPointsTextComponent = TextComponent(
-      anchor: Anchor.topCenter,
-      text: roundWinPoints,
-      textRenderer: TextPaint(
-          style : const TextStyle(
-              fontSize: 33,
-              fontWeight: FontWeight.bold,
-              color: Colors.white
-          )
-      ),
-      position: Vector2(0, 213),
-    );
 
     exTag = SpriteComponent(
         sprite: await Sprite.load('buttons/ex_button.png'),
