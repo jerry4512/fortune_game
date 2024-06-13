@@ -36,13 +36,6 @@ class MegaWin extends PositionComponent with TapCallbacks{
 
     // moveEffect = MoveEffect.to(Vector2(0, -100), EffectController(duration: 1, curve: Curves.linear));
 
-    add(SpriteComponent(
-      sprite: await Sprite.load('/win_hint/big_win_line_hint.png'),
-      position: Vector2(0,-120),
-      scale: Vector2(0.6,0.6),
-      anchor: Anchor.topCenter,
-    ));
-
     add(BigWinLineHint(score: score));
 
     super.onLoad();
