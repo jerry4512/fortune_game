@@ -1,0 +1,3 @@
+{
+  "build_command": "flutter build web --web-renderer canvaskit"
+}
