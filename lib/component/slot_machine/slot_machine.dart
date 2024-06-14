@@ -16,6 +16,7 @@ import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
 import 'package:fortune_game/component/button/spin_button.dart';
 import 'package:fortune_game/component/system_alert/big_win.dart';
 import 'package:fortune_game/component/system_alert/frame_win_bg.dart';
+import 'package:fortune_game/component/system_alert/line_hint.dart';
 import 'package:fortune_game/component/system_alert/mega_win.dart';
 import 'package:fortune_game/component/system_alert/super_win.dart';
 import 'package:fortune_game/component/system_alert/system_alert.dart';
@@ -113,6 +114,7 @@ class SlotMachine extends PositionComponent {
 
   //连线成功提示
   late SpriteComponent frameWinBg;
+  late SpriteComponent lineHint;
   late PositionComponent bigWin;
   late PositionComponent megaWin;
   late PositionComponent superWin;
@@ -383,19 +385,19 @@ class SlotMachine extends PositionComponent {
         slotMachineMagnificationRoller.refreshBlocks();
       }
       if(slotMachineBlocksRollerFirstEffectController.completed){
-        print('方块第一行停止转动');
+        // print('方块第一行停止转动');
         stopSpinning(RollerType.firstRoller);
       }
       if(slotMachineBlocksRollerSecondEffectController.completed){
-        print('方块第二行停止转动');
+        // print('方块第二行停止转动');
         stopSpinning(RollerType.secondRoller);
       }
       if(slotMachineBlocksRollerThirdEffectController.completed){
-        print('方块第三行停止转动');
+        // print('方块第三行停止转动');
         stopSpinning(RollerType.thirdRoller);
       }
       if(slotMachineMagnificationRollerEffectController.completed){
-        print('倍率方块停止转动');
+        // print('倍率方块停止转动');
         stopSpinning(RollerType.magnificationRoller);
       }
     }
@@ -543,7 +545,6 @@ class SlotMachine extends PositionComponent {
         secondMoveEffect.reset();
         thirdMoveEffect.reset();
         magnificationMoveEffect.reset();
-        await blocksAddMask();
         checkWin();
         if(isContinuousSpinning){
           int delay = (isWin)?13:1;
@@ -860,88 +861,95 @@ class SlotMachine extends PositionComponent {
   }
   
   Future<void> blocksAddMask()async {
-    // for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
-    //     SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
-    //     SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
-    //     SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
-    //     SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[i];
-    //     slotMachineRollerFirstBlock.addMask();
-    //     slotMachineRollerSecondBlock.addMask();
-    //     slotMachineRollerThirdBlock.addMask();
-    //     slotMachineRollerMagnificationBlock.addMask();
-    // }
+    print(slotMachineBlocksFirstRoller.blocksRoller[0]);
+    if(!slotMachineBlocksFirstRoller.blocksRoller[0].rectangleComponent.isMounted){
+      for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
+        SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
+        SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
+        SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
+        SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[i];
+        slotMachineRollerFirstBlock.addMask();
+        slotMachineRollerSecondBlock.addMask();
+        slotMachineRollerThirdBlock.addMask();
+        slotMachineRollerMagnificationBlock.addMask();
+      }
+    }
   }
 
   void blocksRemoveMask(LineConnectionType lineConnectionType,{int? index} ){
-    // //横向连线
-    // if(lineConnectionType == LineConnectionType.horizontal){
-    //   for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
-    //     if(i != index){
-    //       SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
-    //       SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
-    //       SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
-    //       SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[i];
-    //       slotMachineRollerFirstBlock.removeMask();
-    //       slotMachineRollerSecondBlock.removeMask();
-    //       slotMachineRollerThirdBlock.removeMask();
-    //       slotMachineRollerMagnificationBlock.removeMask();
-    //     }
-    //   }
-    // }else{
-    //   //左上右下斜向连线
-    //   if(lineConnectionType == LineConnectionType.leftUpRightDown){
-    //     for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
-    //       if(i==2){
-    //         SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
-    //         slotMachineRollerFirstBlock.removeMask();
-    //       }
-    //     }
-    //     for(int i = 0;i<slotMachineBlocksSecondRoller.blocksRoller.length;i++){
-    //       if(i==3){
-    //         SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
-    //         slotMachineRollerSecondBlock.removeMask();
-    //       }
-    //     }
-    //     for(int i = 0;i<slotMachineBlocksThirdRoller.blocksRoller.length;i++){
-    //       if(i==4){
-    //         SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
-    //         SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[i];
-    //         slotMachineRollerThirdBlock.removeMask();
-    //         slotMachineRollerMagnificationBlock.removeMask();
-    //       }
-    //     }
-    //   }else{
-    //     //左下右上斜向连线
-    //     for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
-    //       if(i==4){
-    //         SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
-    //         slotMachineRollerFirstBlock.removeMask();
-    //       }
-    //     }
-    //     for(int i = 0;i<slotMachineBlocksSecondRoller.blocksRoller.length;i++){
-    //       if(i==3){
-    //         SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
-    //         slotMachineRollerSecondBlock.removeMask();
-    //       }
-    //     }
-    //     for(int i = 0;i<slotMachineBlocksThirdRoller.blocksRoller.length;i++){
-    //       if(i==2){
-    //         SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
-    //         SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[i];
-    //         slotMachineRollerThirdBlock.removeMask();
-    //         slotMachineRollerMagnificationBlock.removeMask();
-    //       }
-    //     }
-    //   }
-    // }
+    blocksAddMask();
+    //横向连线
+    if(lineConnectionType == LineConnectionType.horizontal){
+      for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
+        if(i == index){
+          SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
+          SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
+          SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
+          SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[i];
+          slotMachineRollerFirstBlock.removeMask();
+          slotMachineRollerSecondBlock.removeMask();
+          slotMachineRollerThirdBlock.removeMask();
+          slotMachineRollerMagnificationBlock.removeMask();
+        }
+      }
+    }else{
+      //左上右下斜向连线
+      if(lineConnectionType == LineConnectionType.leftUpRightDown){
+        for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
+          if(i==2){
+            SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
+            slotMachineRollerFirstBlock.removeMask();
+          }
+        }
+        for(int i = 0;i<slotMachineBlocksSecondRoller.blocksRoller.length;i++){
+          if(i==3){
+            SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
+            slotMachineRollerSecondBlock.removeMask();
+          }
+        }
+        for(int i = 0;i<slotMachineBlocksThirdRoller.blocksRoller.length;i++){
+          if(i==4){
+            SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
+            SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[i];
+            slotMachineRollerThirdBlock.removeMask();
+            slotMachineRollerMagnificationBlock.removeMask();
+          }
+        }
+      }else{
+        //左下右上斜向连线
+        for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
+          if(i==4){
+            SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
+            slotMachineRollerFirstBlock.removeMask();
+          }
+        }
+        for(int i = 0;i<slotMachineBlocksSecondRoller.blocksRoller.length;i++){
+          if(i==3){
+            SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
+            slotMachineRollerSecondBlock.removeMask();
+          }
+        }
+        for(int i = 0;i<slotMachineBlocksThirdRoller.blocksRoller.length;i++){
+          if(i==2){
+            SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
+            SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[i];
+            slotMachineRollerThirdBlock.removeMask();
+            slotMachineRollerMagnificationBlock.removeMask();
+          }
+        }
+      }
+    }
   }
 
   //显示获胜提示
   void showWinHint(String score){
     frameWinBg = FrameWinBg(score: roundWinPoints, bettingOdds: bettingAmount);
+    lineHint = LineHint(block: '', bettingOdds: bettingAmount, lines: '1', score: roundWinPoints);
     add(frameWinBg);
+    add(lineHint);
     Future.delayed(const Duration(seconds: 3), () {
       remove(frameWinBg);
+      remove(lineHint);
       bigWin = BigWin(score: score);
       add(bigWin);
       Future.delayed(const Duration(seconds: 3), () {

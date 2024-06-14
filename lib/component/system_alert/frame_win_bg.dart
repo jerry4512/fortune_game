@@ -2,10 +2,10 @@
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fortune_game/component/system_alert/line_hint.dart';
 
 
 class FrameWinBg extends SpriteComponent with TapCallbacks{
@@ -17,14 +17,16 @@ class FrameWinBg extends SpriteComponent with TapCallbacks{
   late TextComponent contentTextComponent;
 
   late ScaleEffect scaleEffect;
+  late OpacityEffect opacityEffect;
+  late OpacityProvider opacityProvider;
   @override
   void onLoad() async {
+    sprite = await Sprite.load('win_hint/frame_win_bg.png');
     //缩放效果
     scaleEffect = ScaleEffect.by(
       Vector2.all(1.2),
       EffectController(duration: 0.3),
     );
-    sprite = await Sprite.load('win_hint/frame_win_bg.png');
     add(scaleEffect);
 
     contentTextComponent = TextComponent(
@@ -40,9 +42,6 @@ class FrameWinBg extends SpriteComponent with TapCallbacks{
       priority: 2
     );
     add(contentTextComponent);
-
-
-    add(LineHint(block: 'block', bettingOdds: bettingOdds, lines: '3',score: score));
 
     super.onLoad();
   }

@@ -21,7 +21,7 @@ class BigWin extends PositionComponent with TapCallbacks{
   @override
   void onLoad() async {
 
-    scaleEffect = ScaleEffect.to(Vector2(1.2,1.2),RepeatedEffectController(LinearEffectController(1), 6));
+    scaleEffect = ScaleEffect.to(Vector2(1.2,1.2),EffectController(duration: 6));
     spriteComponent = SpriteComponent(
       sprite: await Sprite.load('win_hint/big_win.png'),
       anchor: Anchor.bottomCenter,

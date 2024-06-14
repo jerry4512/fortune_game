@@ -40,25 +40,19 @@ class SlotMachineRollerBlock extends SpriteComponent {
       }
     }
 
-
+    rectangleComponent = RectangleComponent(size: size, paint: Paint()..color = Colors.black.withOpacity(0.5));
 
     super.onLoad();
   }
 
   Future<void> addMask() async {
-    rectangleComponent = RectangleComponent(size: size, paint: Paint()..color = Colors.black.withOpacity(0.5));
     await add(rectangleComponent);
 
   }
 
   void removeMask(){
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if(rectangleComponent.isMounted){
-        remove(rectangleComponent);
-        print('true');
-      }else{
-        print('false');
-      }
+    Future.delayed(const Duration(milliseconds: 7), () {
+      remove(rectangleComponent);
     });
   }
 
