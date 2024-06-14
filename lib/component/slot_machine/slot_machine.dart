@@ -313,29 +313,32 @@ class SlotMachine extends PositionComponent {
     //连线
     winFirstRowLine = SpriteComponent(
         sprite: await Sprite.load('/lines/line_1.png'),
-    position: Vector2(-290,-260)
+        size: Vector2(460,426),
+        position: Vector2(-290,-260)
     );
 
     winSecondRowLine = SpriteComponent(
-    sprite: await Sprite.load('/lines/line_2.png'),
-    position: Vector2(-290,-20)
+        sprite: await Sprite.load('/lines/line_2.png'),
+        size: Vector2(460,426),
+        position: Vector2(-290,-20)
     );
 
     winThirdRowLine = SpriteComponent(
-    sprite: await Sprite.load('/lines/line_3.png'),
-    position: Vector2(-290,-210)
+        sprite: await Sprite.load('/lines/line_3.png'),
+        size: Vector2(460,426),
+        position: Vector2(-290,-210)
     );
 
     winForthRowLine = SpriteComponent(
         sprite: await Sprite.load('/lines/line_4.png'),
-        size: Vector2(495,225),
-        position: Vector2(-300,-50)
+        size: Vector2(460,207),
+        position: Vector2(-290,-55)
     );
 
     windFifthRowLine = SpriteComponent(
         sprite: await Sprite.load('/lines/line_5.png'),
-        size: Vector2(495,225),
-        position: Vector2(-300,-70)
+        size: Vector2(460,207),
+        position: Vector2(-290,-55)
     );
     winLines = [winFirstRowLine,winSecondRowLine,winThirdRowLine,winForthRowLine,windFifthRowLine];
 
