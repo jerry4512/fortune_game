@@ -237,9 +237,7 @@ class SlotMachine extends PositionComponent {
       position: Vector2(0, 343),
     );
     add(balanceTextComponent);
-
-    // add(LineHint(block: 'block', bettingOdds: '1', lines: '3', score:'100'));
-
+    
     super.onLoad();
   }
 

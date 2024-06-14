@@ -27,7 +27,7 @@ class MegaWin extends PositionComponent with TapCallbacks{
       sprite: await Sprite.load('win_hint/mega_win.png'),
       anchor: Anchor.bottomCenter,
     );
-    spriteComponent.add(scaleEffect);
+    add(scaleEffect);
 
 
     add(RectangleComponent(size: Vector2(1600, 1600), anchor: Anchor.center, paint: Paint()..color = Colors.black.withOpacity(0.5)));

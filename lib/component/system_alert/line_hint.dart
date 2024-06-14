@@ -37,7 +37,7 @@ class LineHint extends SpriteComponent with TapCallbacks{
     ));
 
     add(OpacityEffect.fadeIn(
-      EffectController(duration: 0.5),
+      EffectController(duration: 0.1),
     ));
 
     add(TextComponent(

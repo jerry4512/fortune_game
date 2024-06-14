@@ -15,7 +15,6 @@ class BigWin extends PositionComponent with TapCallbacks{
   BigWin({required this.score}) : super(anchor: Anchor.center, priority: 2);
 
   late ScaleEffect scaleEffect;
-  late MoveEffect moveEffect;
   late SpriteComponent spriteComponent;
 
   @override
@@ -26,7 +25,7 @@ class BigWin extends PositionComponent with TapCallbacks{
       sprite: await Sprite.load('win_hint/big_win.png'),
       anchor: Anchor.bottomCenter,
     );
-    spriteComponent.add(scaleEffect);
+    add(scaleEffect);
 
     add(RectangleComponent(size: Vector2(1600, 1600), anchor: Anchor.center, paint: Paint()..color = Colors.black.withOpacity(0.5)));
 
