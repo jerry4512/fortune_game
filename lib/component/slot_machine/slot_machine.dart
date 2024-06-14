@@ -237,7 +237,7 @@ class SlotMachine extends PositionComponent {
       position: Vector2(0, 343),
     );
     add(balanceTextComponent);
-    
+
     super.onLoad();
   }
 
