@@ -22,6 +22,8 @@ class SlotMachineRollerBlock extends SpriteComponent {
 
   MoveEffect? moveEffect;
 
+  late RectangleComponent rectangleComponent;
+
   @override
   void onLoad() async {
     //Set sprite on load.
@@ -38,12 +40,26 @@ class SlotMachineRollerBlock extends SpriteComponent {
       }
     }
 
+
+
     super.onLoad();
   }
 
-  void addMask(){
-    add(RectangleComponent(size: size, paint: Paint()..color = Colors.black.withOpacity(0.5)));
+  Future<void> addMask() async {
+    rectangleComponent = RectangleComponent(size: size, paint: Paint()..color = Colors.black.withOpacity(0.5));
+    await add(rectangleComponent);
 
+  }
+
+  void removeMask(){
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if(rectangleComponent.isMounted){
+        remove(rectangleComponent);
+        print('true');
+      }else{
+        print('false');
+      }
+    });
   }
 
 }
