@@ -244,10 +244,10 @@ class SlotMachine extends PositionComponent {
     );
     add(balanceTextComponent);
 
-    frameWinBg = FrameWinBg(score: roundWinPoints, bettingOdds: bettingAmount);
-    lineHint = LineHint(block: '', bettingOdds: bettingAmount, lines: '1', score: roundWinPoints);
-    add(frameWinBg);
-    add(lineHint);
+    // frameWinBg = FrameWinBg(score: roundWinPoints, bettingOdds: bettingAmount);
+    // lineHint = LineHint(block: '', bettingOdds: bettingAmount, lines: '1', score: roundWinPoints);
+    // add(frameWinBg);
+    // add(lineHint);
 
     super.onLoad();
   }
@@ -323,31 +323,31 @@ class SlotMachine extends PositionComponent {
 
     //连线
     winFirstRowLine = SpriteComponent(
-        sprite: await Sprite.load('/lines/line_1.png'),
+        sprite: await Sprite.load('lines/line_1.png'),
         size: Vector2(460,426),
         position: Vector2(-290,-260)
     );
 
     winSecondRowLine = SpriteComponent(
-        sprite: await Sprite.load('/lines/line_2.png'),
+        sprite: await Sprite.load('lines/line_2.png'),
         size: Vector2(460,426),
         position: Vector2(-290,-20)
     );
 
     winThirdRowLine = SpriteComponent(
-        sprite: await Sprite.load('/lines/line_3.png'),
+        sprite: await Sprite.load('lines/line_3.png'),
         size: Vector2(460,426),
         position: Vector2(-290,-210)
     );
 
     winForthRowLine = SpriteComponent(
-        sprite: await Sprite.load('/lines/line_4.png'),
+        sprite: await Sprite.load('lines/line_4.png'),
         size: Vector2(460,207),
         position: Vector2(-290,-55)
     );
 
     windFifthRowLine = SpriteComponent(
-        sprite: await Sprite.load('/lines/line_5.png'),
+        sprite: await Sprite.load('lines/line_5.png'),
         size: Vector2(460,207),
         position: Vector2(-290,-55)
     );
