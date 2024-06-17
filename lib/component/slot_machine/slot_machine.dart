@@ -244,6 +244,11 @@ class SlotMachine extends PositionComponent {
     );
     add(balanceTextComponent);
 
+    frameWinBg = FrameWinBg(score: roundWinPoints, bettingOdds: bettingAmount);
+    lineHint = LineHint(block: '', bettingOdds: bettingAmount, lines: '1', score: roundWinPoints);
+    add(frameWinBg);
+    add(lineHint);
+
     super.onLoad();
   }
 

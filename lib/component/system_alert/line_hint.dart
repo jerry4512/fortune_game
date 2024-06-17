@@ -17,7 +17,7 @@ class LineHint extends SpriteComponent with TapCallbacks{
   String lines;
   String score;
 
-  LineHint({required this.block,required this.bettingOdds,required this.lines,required this.score}) : super(anchor: Anchor.center, position: Vector2(0, 200),scale: Vector2(0.7,0.7));
+  LineHint({required this.block,required this.bettingOdds,required this.lines,required this.score}) : super(anchor: Anchor.center, position: Vector2(-50, 200),scale: Vector2(0.7,0.7));
 
   List<String> magnificationBlockList = [];
 
