@@ -18,6 +18,14 @@ class WinMagnificationBlock extends SpriteComponent {
   void onLoad() async {
     sprite = await Sprite.load(image);
 
+
+    Future.delayed(const Duration(seconds: 1), () {
+      add(OpacityEffect.fadeOut(
+        EffectController(duration: 0.7),
+      ));
+    });
+
+
     super.onLoad();
   }
 

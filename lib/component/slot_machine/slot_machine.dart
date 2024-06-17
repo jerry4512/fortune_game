@@ -249,6 +249,9 @@ class SlotMachine extends PositionComponent {
     // add(frameWinBg);
     // add(lineHint);
 
+    // showMagnificationBlock();
+
+
     super.onLoad();
   }
 
@@ -898,11 +901,9 @@ class SlotMachine extends PositionComponent {
           SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
           SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
           SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
-          SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[i];
           slotMachineRollerFirstBlock.removeMask();
           slotMachineRollerSecondBlock.removeMask();
           slotMachineRollerThirdBlock.removeMask();
-          slotMachineRollerMagnificationBlock.removeMask();
         }
       }
     }else{
@@ -923,9 +924,7 @@ class SlotMachine extends PositionComponent {
         for(int i = 0;i<slotMachineBlocksThirdRoller.blocksRoller.length;i++){
           if(i==4){
             SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
-            SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[i];
             slotMachineRollerThirdBlock.removeMask();
-            slotMachineRollerMagnificationBlock.removeMask();
           }
         }
       }else{
@@ -945,13 +944,13 @@ class SlotMachine extends PositionComponent {
         for(int i = 0;i<slotMachineBlocksThirdRoller.blocksRoller.length;i++){
           if(i==2){
             SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
-            SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[i];
             slotMachineRollerThirdBlock.removeMask();
-            slotMachineRollerMagnificationBlock.removeMask();
           }
         }
       }
     }
+    SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[3];
+    slotMachineRollerMagnificationBlock.removeMask();
   }
 
   //显示获胜提示
@@ -986,14 +985,15 @@ class SlotMachine extends PositionComponent {
     SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[3];
     winSlotMachineRollerMagnificationBlock = WinMagnificationBlock(image: slotMachineRollerMagnificationBlock.image);
     add(winSlotMachineRollerMagnificationBlock);
-    EffectController effectController = EffectController(duration: 0.7, curve: Curves.linear);
-    MoveEffect moveEffect = MoveEffect.to(Vector2(winSlotMachineRollerMagnificationBlock.position.x-270, winSlotMachineRollerMagnificationBlock.position.y),
-        effectController,onComplete: (){
-          winSlotMachineRollerMagnificationBlock.removeAll(exBgSpriteComponent.children.whereType<Effect>());
-          remove(winSlotMachineRollerMagnificationBlock);
-        });
-    winSlotMachineRollerMagnificationBlock.add(moveEffect);
-    print(slotMachineRollerMagnificationBlock.image);
+    Future.delayed(const Duration(seconds: 1), () {
+      EffectController effectController = EffectController(duration: 0.7, curve: Curves.linear);
+      MoveEffect moveEffect = MoveEffect.to(Vector2(winSlotMachineRollerMagnificationBlock.position.x-270, winSlotMachineRollerMagnificationBlock.position.y),
+          effectController,onComplete: (){
+            winSlotMachineRollerMagnificationBlock.removeAll(exBgSpriteComponent.children.whereType<Effect>());
+            remove(winSlotMachineRollerMagnificationBlock);
+          });
+      winSlotMachineRollerMagnificationBlock.add(moveEffect);
+    });
   }
 
   void resetRoundWinComponents(){
