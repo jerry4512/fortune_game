@@ -289,9 +289,9 @@ class SlotMachine extends PositionComponent {
 
     //初始化EffectController
     slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), 3);
-    slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), 5);
-    slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), 7);
-    slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), 9);
+    slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), 4);
+    slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), 5);
+    slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), 6);
 
     // slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), 9);
     // slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), 12);
@@ -550,7 +550,7 @@ class SlotMachine extends PositionComponent {
         if(firstRollerSpinning){
           slotMachineBlocksFirstRoller.position = Vector2(-268, -76);
           //回弹效果
-          MoveEffect moveEffect = MoveEffect.to(Vector2(slotMachineBlocksFirstRoller.position.x,slotMachineBlocksFirstRoller.position.y-20),EffectController(duration: 0.5,curve: Curves.easeInOut),onComplete: (){
+          MoveEffect moveEffect = MoveEffect.to(Vector2(slotMachineBlocksFirstRoller.position.x,slotMachineBlocksFirstRoller.position.y-20),EffectController(duration: 0.35,curve: Curves.easeInOut),onComplete: (){
             slotMachineBlocksFirstRoller.removeAll(slotMachineBlocksFirstRoller.children.whereType<Effect>());
           });
           slotMachineBlocksFirstRoller.add(moveEffect);
@@ -561,7 +561,7 @@ class SlotMachine extends PositionComponent {
         if(secondRollerSpinning){
           slotMachineBlocksSecondRoller.position = Vector2(-272, -76);
           //回弹效果
-          MoveEffect moveEffect = MoveEffect.to(Vector2(slotMachineBlocksSecondRoller.position.x,slotMachineBlocksSecondRoller.position.y-20),EffectController(duration: 0.5,curve: Curves.easeInOut),onComplete: (){
+          MoveEffect moveEffect = MoveEffect.to(Vector2(slotMachineBlocksSecondRoller.position.x,slotMachineBlocksSecondRoller.position.y-20),EffectController(duration: 0.35,curve: Curves.easeInOut),onComplete: (){
             slotMachineBlocksSecondRoller.removeAll(slotMachineBlocksSecondRoller.children.whereType<Effect>());
           });
           slotMachineBlocksSecondRoller.add(moveEffect);
@@ -572,7 +572,7 @@ class SlotMachine extends PositionComponent {
         if(thirdRollerSpinning){
           slotMachineBlocksThirdRoller.position = Vector2(-276, -76);
           //回弹效果
-          MoveEffect moveEffect = MoveEffect.to(Vector2(slotMachineBlocksThirdRoller.position.x,slotMachineBlocksThirdRoller.position.y-20),EffectController(duration: 0.5,curve: Curves.easeInOut),onComplete: (){
+          MoveEffect moveEffect = MoveEffect.to(Vector2(slotMachineBlocksThirdRoller.position.x,slotMachineBlocksThirdRoller.position.y-20),EffectController(duration: 0.35,curve: Curves.easeInOut),onComplete: (){
             slotMachineBlocksThirdRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<Effect>());
           });
           slotMachineBlocksThirdRoller.add(moveEffect);
@@ -583,7 +583,7 @@ class SlotMachine extends PositionComponent {
         rollerState = RollerState.stopped;
         slotMachineMagnificationRoller.position = Vector2(200,-80);
         //回弹效果
-        MoveEffect moveEffect = MoveEffect.to(Vector2(slotMachineMagnificationRoller.position.x,slotMachineMagnificationRoller.position.y- 20),EffectController(duration: 0.5,curve: Curves.easeInOut),onComplete: (){
+        MoveEffect moveEffect = MoveEffect.to(Vector2(slotMachineMagnificationRoller.position.x,slotMachineMagnificationRoller.position.y- 20),EffectController(duration: 0.35,curve: Curves.easeInOut),onComplete: (){
           slotMachineMagnificationRoller.removeAll(slotMachineMagnificationRoller.children.whereType<Effect>());
           firstMoveEffect.reset();
           secondMoveEffect.reset();
