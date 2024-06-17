@@ -123,7 +123,7 @@ class SlotMachine extends PositionComponent {
   late MoveEffect effect;
   late MoveEffect effect1;
 
-  late SpriteComponent winSlotMachineRollerMagnificationBlock;
+  late WinMagnificationBlock winSlotMachineRollerMagnificationBlock;
 
   @override
   Future<void> onLoad() async {
