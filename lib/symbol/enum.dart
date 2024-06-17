@@ -22,6 +22,12 @@ enum ButtonType {
 
 //线连接类型
 enum LineConnectionType {
+  // //第一列
+  // horizontalTop,
+  // //第二列
+  // horizontalCenter,
+  // //第三列
+  // horizontalBottom,
   horizontal,
   //左上右下
   leftUpRightDown,

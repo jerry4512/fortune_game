@@ -12,7 +12,7 @@ class FrameWinBg extends SpriteComponent with TapCallbacks{
   final String score;
   final String bettingOdds;
 
-  FrameWinBg({required this.score,required this.bettingOdds}) : super(anchor: Anchor.center);
+  FrameWinBg({required this.score,required this.bettingOdds}) : super(anchor: Anchor.center,position: Vector2(-50,55));
 
   late TextComponent contentTextComponent;
 

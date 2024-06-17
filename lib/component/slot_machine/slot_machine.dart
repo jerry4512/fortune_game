@@ -14,6 +14,7 @@ import 'package:fortune_game/component/roller/slot_machine_blocks_roller.dart';
 import 'package:fortune_game/component/roller/slot_machine_magnification_roller.dart';
 import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
 import 'package:fortune_game/component/button/spin_button.dart';
+import 'package:fortune_game/component/roller/win_magnification_block.dart';
 import 'package:fortune_game/component/system_alert/big_win.dart';
 import 'package:fortune_game/component/system_alert/frame_win_bg.dart';
 import 'package:fortune_game/component/system_alert/line_hint.dart';
@@ -118,6 +119,11 @@ class SlotMachine extends PositionComponent {
   late PositionComponent bigWin;
   late PositionComponent megaWin;
   late PositionComponent superWin;
+
+  late MoveEffect effect;
+  late MoveEffect effect1;
+
+  late SpriteComponent winSlotMachineRollerMagnificationBlock;
 
   @override
   Future<void> onLoad() async {
@@ -426,6 +432,7 @@ class SlotMachine extends PositionComponent {
 
   //关闭Ex按钮
   Future<void> closeExButton() async {
+    exBgSpriteComponent.removeAll(exBgSpriteComponent.children.whereType<Effect>());
     exButtonCloseMoveEffect = MoveEffect.to(
         Vector2(exBgSpriteComponent.position.x-203, exBgSpriteComponent.position.y),
         eXButtonCloseEffectController);
@@ -860,7 +867,7 @@ class SlotMachine extends PositionComponent {
       add(balanceTextComponent);
     }
   }
-  
+
   Future<void> blocksAddMask()async {
     print(slotMachineBlocksFirstRoller.blocksRoller[0]);
     if(!slotMachineBlocksFirstRoller.blocksRoller[0].rectangleComponent.isMounted){
@@ -948,6 +955,7 @@ class SlotMachine extends PositionComponent {
     lineHint = LineHint(block: '', bettingOdds: bettingAmount, lines: '1', score: roundWinPoints);
     add(frameWinBg);
     add(lineHint);
+    showMagnificationBlock();
     Future.delayed(const Duration(seconds: 3), () {
       remove(frameWinBg);
       remove(lineHint);
@@ -967,6 +975,20 @@ class SlotMachine extends PositionComponent {
         });
       });
     });
+  }
+
+  void showMagnificationBlock(){
+    SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[3];
+    winSlotMachineRollerMagnificationBlock = WinMagnificationBlock(image: slotMachineRollerMagnificationBlock.image);
+    add(winSlotMachineRollerMagnificationBlock);
+    EffectController effectController = EffectController(duration: 0.7, curve: Curves.linear);
+    MoveEffect moveEffect = MoveEffect.to(Vector2(winSlotMachineRollerMagnificationBlock.position.x-270, winSlotMachineRollerMagnificationBlock.position.y),
+        effectController,onComplete: (){
+          winSlotMachineRollerMagnificationBlock.removeAll(exBgSpriteComponent.children.whereType<Effect>());
+          remove(winSlotMachineRollerMagnificationBlock);
+        });
+    winSlotMachineRollerMagnificationBlock.add(moveEffect);
+    print(slotMachineRollerMagnificationBlock.image);
   }
 
   void resetRoundWinComponents(){
