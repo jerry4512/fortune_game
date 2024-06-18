@@ -25,6 +25,7 @@ import 'package:fortune_game/component/system_alert/super_win.dart';
 import 'package:fortune_game/component/system_alert/system_alert.dart';
 import 'package:fortune_game/symbol/calculate/calculate_win.dart';
 import 'package:fortune_game/symbol/enum.dart';
+import 'package:fortune_game/symbol/parameter.dart';
 import 'package:fortune_game/symbol/symbol_blocks.dart';
 
 
@@ -268,15 +269,17 @@ class SlotMachine extends PositionComponent {
   Future<void> init() async {
     exBgSpriteComponent = ExBgButton(onTap: (value){
       if(value){
-        // add(fakeRectangle);
+        Parameter.isOpenExMode = true;
         exTag = ExTag();
         add(exTag);
         add(ExAnimation());
-        // Future.delayed(const Duration(seconds: 3), () {
-        //   remove(fakeRectangle);
-        // });
+        Future.delayed(const Duration(seconds: 1), () {
+          changeExMode();
+        });
       }else{
+        Parameter.isOpenExMode = false;
         remove(exTag);
+        slotMachineMagnificationRoller.revertRoller();
       }
     });
 
@@ -493,6 +496,7 @@ class SlotMachine extends PositionComponent {
       secondRollerSpinning = true;
       thirdRollerSpinning = true;
       magnificationRollerSpinning = true;
+      slotMachineMagnificationRoller.defaultBlocks = [];
       resetRoundWinComponents();
       print('单次转动');
       print('开始转动');
@@ -1009,6 +1013,10 @@ class SlotMachine extends PositionComponent {
         });
       });
     });
+  }
+
+  void changeExMode(){
+    slotMachineMagnificationRoller.changeExMode();
   }
 
   void showMagnificationBlock(){
