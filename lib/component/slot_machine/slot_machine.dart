@@ -240,7 +240,19 @@ class SlotMachine extends PositionComponent {
 
     //快速开始
     add(QuickStartButton(onTap: (){
-      print('快速开始');
+      Parameter.isOpenQuickMode = !Parameter.isOpenQuickMode;
+      print('QuickMode: ${Parameter.isOpenQuickMode}');
+      if(Parameter.isOpenQuickMode){
+        Parameter.firstRollerRepeatTimes = 2;
+        Parameter.secondRollerRepeatTimes = 2;
+        Parameter.thirdRollerRepeatTimes = 2;
+        Parameter.magnificationRollerRepeatTimes = 2;
+      }else{
+        Parameter.firstRollerRepeatTimes = 3;
+        Parameter.secondRollerRepeatTimes = 4;
+        Parameter.thirdRollerRepeatTimes = 5;
+        Parameter.magnificationRollerRepeatTimes = 6;
+      }
     }));
 
     //余额显示
@@ -297,10 +309,10 @@ class SlotMachine extends PositionComponent {
     );
 
     //初始化EffectController
-    slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), 3);
-    slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), 4);
-    slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), 5);
-    slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), 6);
+    // slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.firstRollerRepeatTimes);
+    // slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.secondRollerRepeatTimes);
+    // slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.thirdRollerRepeatTimes);
+    // slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.magnificationRollerRepeatTimes);
 
     // slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), 9);
     // slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), 12);
@@ -513,6 +525,12 @@ class SlotMachine extends PositionComponent {
       isWin = false;
       getPointsList = [];
       rollerState = RollerState.rolling;
+      slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.firstRollerRepeatTimes);
+      slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.secondRollerRepeatTimes);
+      slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.thirdRollerRepeatTimes);
+      slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.magnificationRollerRepeatTimes);
+
+
       firstMoveEffect = MoveEffect.to(
           Vector2(slotMachineBlocksFirstRoller.position.x, slotMachineBlocksFirstRoller.position.y + 200),
           slotMachineBlocksRollerFirstEffectController);
