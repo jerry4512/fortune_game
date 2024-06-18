@@ -1,6 +1,7 @@
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:fortune_game/component/ex_animation/ex_animation.dart';
 
 typedef OnTap = void Function(bool);
 

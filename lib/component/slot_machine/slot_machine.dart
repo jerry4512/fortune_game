@@ -9,6 +9,8 @@ import 'package:fortune_game/component/button/ex_bg_button.dart';
 import 'package:fortune_game/component/button/ex_button.dart';
 import 'package:fortune_game/component/button/quick_start_button.dart';
 import 'package:fortune_game/component/button/setting_button.dart';
+import 'package:fortune_game/component/ex_animation/ex_animation.dart';
+import 'package:fortune_game/component/ex_animation/ex_tag.dart';
 import 'package:fortune_game/component/marquee/spin_button.dart';
 import 'package:fortune_game/component/roller/slot_machine_blocks_roller.dart';
 import 'package:fortune_game/component/roller/slot_machine_magnification_roller.dart';
@@ -256,6 +258,8 @@ class SlotMachine extends PositionComponent {
 
     // showMagnificationBlock();
 
+    // add(ExAnimation());
+
 
     super.onLoad();
   }
@@ -265,7 +269,9 @@ class SlotMachine extends PositionComponent {
     exBgSpriteComponent = ExBgButton(onTap: (value){
       if(value){
         // add(fakeRectangle);
+        exTag = ExTag();
         add(exTag);
+        add(ExAnimation());
         // Future.delayed(const Duration(seconds: 3), () {
         //   remove(fakeRectangle);
         // });
@@ -378,13 +384,6 @@ class SlotMachine extends PositionComponent {
         startSpinning();
       }
     });
-
-    exTag = SpriteComponent(
-        sprite: await Sprite.load('buttons/ex_button.png'),
-        anchor: Anchor.centerLeft,
-        size: Vector2(45,30),
-      position: Vector2(120,55)
-    );
 
   }
 
