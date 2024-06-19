@@ -135,6 +135,7 @@ class SlotMachine extends PositionComponent {
   bool secondRollerSpinning = false;
   bool thirdRollerSpinning = false;
   bool magnificationRollerSpinning = false;
+  bool isCanSpin = true;
 
   @override
   Future<void> onLoad() async {
@@ -497,58 +498,62 @@ class SlotMachine extends PositionComponent {
   //开始转动
   Future<void> startSpinning() async {
     if(int.parse(bettingAmount) <= int.parse(balance)){
-      final dio = Dio();
-      final response = await dio.post('https://fortune-game-server.zeabur.app/bet/normal-game');
-      BettingResultModel bettingResultModel = BettingResultModel.fromJson(response.data);
-      print(bettingResultModel);
+      if(isCanSpin){
+        isCanSpin = false;
+        final dio = Dio();
+        final response = await dio.post('https://fortune-game-server.zeabur.app/bet/normal-game');
+        BettingResultModel bettingResultModel = BettingResultModel.fromJson(response.data);
+        print(bettingResultModel);
 
-      roundWinPoints = '0';
-      firstRollerSpinning = true;
-      secondRollerSpinning = true;
-      thirdRollerSpinning = true;
-      magnificationRollerSpinning = true;
-      slotMachineMagnificationRoller.defaultBlocks = [];
-      resetRoundWinComponents();
-      print('单次转动');
-      print('开始转动');
-      //移除所有winLine
-      for(int i = 0;i<winLines.length;i++){
-        if(winLines[i].isMounted){
-          remove(winLines[i]);
+        roundWinPoints = '0';
+        firstRollerSpinning = true;
+        secondRollerSpinning = true;
+        thirdRollerSpinning = true;
+        magnificationRollerSpinning = true;
+        slotMachineMagnificationRoller.defaultBlocks = [];
+        resetRoundWinComponents();
+        print('单次转动');
+        print('开始转动');
+        //移除所有winLine
+        for(int i = 0;i<winLines.length;i++){
+          if(winLines[i].isMounted){
+            remove(winLines[i]);
+          }
         }
+        slotMachineBlocksFirstRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<RectangleComponent>());
+        slotMachineBlocksSecondRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<RectangleComponent>());
+        slotMachineBlocksThirdRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<RectangleComponent>());
+        slotMachineMagnificationRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<RectangleComponent>());
+        isWin = false;
+        getPointsList = [];
+        rollerState = RollerState.rolling;
+        slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.firstRollerRepeatTimes);
+        slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.secondRollerRepeatTimes);
+        slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.thirdRollerRepeatTimes);
+        slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.magnificationRollerRepeatTimes);
+
+
+        firstMoveEffect = MoveEffect.to(
+            Vector2(slotMachineBlocksFirstRoller.position.x, slotMachineBlocksFirstRoller.position.y + 200),
+            slotMachineBlocksRollerFirstEffectController);
+        slotMachineBlocksFirstRoller.add(firstMoveEffect);
+
+        secondMoveEffect = MoveEffect.to(
+            Vector2(slotMachineBlocksSecondRoller.position.x, slotMachineBlocksSecondRoller.position.y + 200),
+            slotMachineBlocksRollerSecondEffectController);
+        slotMachineBlocksSecondRoller.add(secondMoveEffect);
+
+        thirdMoveEffect = MoveEffect.to(
+            Vector2(slotMachineBlocksThirdRoller.position.x, slotMachineBlocksThirdRoller.position.y + 200),
+            slotMachineBlocksRollerThirdEffectController);
+        slotMachineBlocksThirdRoller.add(thirdMoveEffect);
+
+        magnificationMoveEffect = MoveEffect.to(
+            Vector2(slotMachineMagnificationRoller.position.x, slotMachineMagnificationRoller.position.y + 200),
+            slotMachineMagnificationRollerEffectController);
+        slotMachineMagnificationRoller.add(magnificationMoveEffect);
       }
-      slotMachineBlocksFirstRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<RectangleComponent>());
-      slotMachineBlocksSecondRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<RectangleComponent>());
-      slotMachineBlocksThirdRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<RectangleComponent>());
-      slotMachineMagnificationRoller.removeAll(slotMachineBlocksThirdRoller.children.whereType<RectangleComponent>());
-      isWin = false;
-      getPointsList = [];
-      rollerState = RollerState.rolling;
-      slotMachineBlocksRollerFirstEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.firstRollerRepeatTimes);
-      slotMachineBlocksRollerSecondEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.secondRollerRepeatTimes);
-      slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.thirdRollerRepeatTimes);
-      slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), Parameter.magnificationRollerRepeatTimes);
 
-
-      firstMoveEffect = MoveEffect.to(
-          Vector2(slotMachineBlocksFirstRoller.position.x, slotMachineBlocksFirstRoller.position.y + 200),
-          slotMachineBlocksRollerFirstEffectController);
-      slotMachineBlocksFirstRoller.add(firstMoveEffect);
-
-      secondMoveEffect = MoveEffect.to(
-          Vector2(slotMachineBlocksSecondRoller.position.x, slotMachineBlocksSecondRoller.position.y + 200),
-          slotMachineBlocksRollerSecondEffectController);
-      slotMachineBlocksSecondRoller.add(secondMoveEffect);
-
-      thirdMoveEffect = MoveEffect.to(
-          Vector2(slotMachineBlocksThirdRoller.position.x, slotMachineBlocksThirdRoller.position.y + 200),
-          slotMachineBlocksRollerThirdEffectController);
-      slotMachineBlocksThirdRoller.add(thirdMoveEffect);
-
-      magnificationMoveEffect = MoveEffect.to(
-          Vector2(slotMachineMagnificationRoller.position.x, slotMachineMagnificationRoller.position.y + 200),
-          slotMachineMagnificationRollerEffectController);
-      slotMachineMagnificationRoller.add(magnificationMoveEffect);
     }else{
       //馀额不足
       isQuickSpinning = false;
@@ -904,6 +909,7 @@ class SlotMachine extends PositionComponent {
         position: Vector2(0, 343),
       );
       add(balanceTextComponent);
+      isCanSpin = true;
     }else{
       //获胜，加上奖励金额
       print('获胜');
@@ -1026,6 +1032,7 @@ class SlotMachine extends PositionComponent {
           add(superWin);
           Future.delayed(const Duration(seconds: 3), () {
             remove(superWin);
+            isCanSpin = true;
           });
         });
       });

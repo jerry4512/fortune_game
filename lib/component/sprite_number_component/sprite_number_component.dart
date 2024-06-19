@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:flame/components.dart';
-import 'package:fortune_game/component/workaround/has_opacity_provider.dart';
 
 /// 這是一個用數字圖 png 來拚出來的 2D 數字元件，目前只支援顯示正整數。
 /// 目前支援使用檔名: 0.png ~ 9.png 來製成元件，這些圖片都必須要有。
