@@ -30,14 +30,18 @@ class SlotMachineRollerBlock extends SpriteComponent {
     sprite = await Sprite.load(image);
 
     //特殊方块需要比较大尺寸
-    size = Vector2(125,93);
+    scale = Vector2(0.75,0.75);
     priority = 1;
     if(image == 'blocks/symbol_wild.png'){
       size = Vector2(140,110);
       if(rollerIndex >= 2){
         priority = 2;
-        size = Vector2(140,100);
+        scale = Vector2(1.2,1.2);
       }
+    }
+    if(blockType == BlockType.magnification){
+      scale = Vector2(1,1);
+      size = Vector2(125,93);
     }
 
     rectangleComponent = RectangleComponent(size: size, paint: Paint()..color = Colors.black.withOpacity(0.5));
