@@ -7,6 +7,7 @@ import 'package:flame/events.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fortune_game/component/sprite_number_component/sprite_number_component.dart';
 import 'package:fortune_game/symbol/calculate/calculate_win.dart';
 import 'package:fortune_game/symbol/symbol_blocks.dart';
 

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+import 'package:dio/dio.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +18,14 @@ import 'package:fortune_game/component/roller/slot_machine_magnification_roller.
 import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
 import 'package:fortune_game/component/button/spin_button.dart';
 import 'package:fortune_game/component/roller/win_magnification_block.dart';
+import 'package:fortune_game/component/sprite_number_component/sprite_number_component.dart';
 import 'package:fortune_game/component/system_alert/big_win.dart';
 import 'package:fortune_game/component/system_alert/frame_win_bg.dart';
 import 'package:fortune_game/component/system_alert/line_hint.dart';
 import 'package:fortune_game/component/system_alert/mega_win.dart';
 import 'package:fortune_game/component/system_alert/super_win.dart';
 import 'package:fortune_game/component/system_alert/system_alert.dart';
+import 'package:fortune_game/models/betting_result_model.dart';
 import 'package:fortune_game/symbol/calculate/calculate_win.dart';
 import 'package:fortune_game/symbol/enum.dart';
 import 'package:fortune_game/symbol/parameter.dart';
@@ -264,15 +267,6 @@ class SlotMachine extends PositionComponent {
     );
     add(balanceTextComponent);
 
-    // frameWinBg = FrameWinBg(score: roundWinPoints, bettingOdds: bettingAmount);
-    // lineHint = LineHint(block: '', bettingOdds: bettingAmount, lines: '1', score: roundWinPoints);
-    // add(frameWinBg);
-    // add(lineHint);
-
-    // showMagnificationBlock();
-
-    // add(ExAnimation());
-
 
     super.onLoad();
   }
@@ -501,8 +495,13 @@ class SlotMachine extends PositionComponent {
   }
 
   //开始转动
-  void startSpinning(){
+  Future<void> startSpinning() async {
     if(int.parse(bettingAmount) <= int.parse(balance)){
+      final dio = Dio();
+      final response = await dio.post('https://fortune-game-server.zeabur.app/bet/normal-game');
+      BettingResultModel bettingResultModel = BettingResultModel.fromJson(response.data);
+      print(bettingResultModel);
+
       roundWinPoints = '0';
       firstRollerSpinning = true;
       secondRollerSpinning = true;

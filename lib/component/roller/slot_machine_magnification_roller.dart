@@ -59,13 +59,13 @@ class SlotMachineMagnificationRoller extends PositionComponent with HasGameRef {
   void addBlocks(List<SlotMachineRollerBlock> blocks,BlockType type){
     List<String> defaultBlocksImageList = SymbolBlocks().blocksImageList;
     //开启Ex模式时移除1倍方块
-    if(Parameter.isOpenExMode){
-      defaultBlocksImageList.removeAt(0);
-    }
     List<Vector2> positions = blocksPositions;
     BlockType blockType = BlockType.block;
     if(type == BlockType.magnification){
       defaultBlocksImageList = SymbolBlocks().magnificationImageList;
+      if(Parameter.isOpenExMode){
+        defaultBlocksImageList.removeAt(0);
+      }
       positions = SymbolBlocks().magnificationPositions;
       blockType = BlockType.magnification;
     }
