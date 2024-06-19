@@ -1,9 +1,11 @@
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:fortune_game/component/button/ex_question.dart';
 import 'package:fortune_game/component/button/ex_switch_button.dart';
+import 'package:fortune_game/component/system_alert/system_explanation.dart';
 
-typedef OnTap = void Function(bool);
+typedef OnTap = void Function(Map);
 
 class ExBgButton extends SpriteComponent with TapCallbacks{
   final OnTap onTap;
@@ -12,6 +14,10 @@ class ExBgButton extends SpriteComponent with TapCallbacks{
 
   late SpriteComponent switchSprite;
   late SpriteComponent exQuestionSprite;
+  Map<String, bool> resultMap = {
+    'switchSprite': false,
+    'exQuestionSprite': false,
+  };
 
   @override
   void onLoad() async {
@@ -26,14 +32,14 @@ class ExBgButton extends SpriteComponent with TapCallbacks{
 
     //开关
     switchSprite = ExSwitchButton(onTap: (value){
-      onTap(value);
+      resultMap['switchSprite'] = value;
+      onTap(resultMap);
     });
 
-    exQuestionSprite = SpriteComponent(
-        sprite: await Sprite.load('buttons/ex_question_mark.png'),
-        scale: Vector2(0.8,0.8),
-        position: Vector2(210, 7)
-    );
+    exQuestionSprite = ExQuestion(onTap: (value){
+      resultMap['exQuestionSprite'] = value;
+      onTap(resultMap);
+    });
 
     add(switchSprite);
     add(exQuestionSprite);

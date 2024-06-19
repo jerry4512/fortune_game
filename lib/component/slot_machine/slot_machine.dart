@@ -25,6 +25,7 @@ import 'package:fortune_game/component/system_alert/line_hint.dart';
 import 'package:fortune_game/component/system_alert/mega_win.dart';
 import 'package:fortune_game/component/system_alert/super_win.dart';
 import 'package:fortune_game/component/system_alert/system_alert.dart';
+import 'package:fortune_game/component/system_alert/system_explanation.dart';
 import 'package:fortune_game/models/betting_result_model.dart';
 import 'package:fortune_game/symbol/calculate/calculate_win.dart';
 import 'package:fortune_game/symbol/enum.dart';
@@ -136,6 +137,8 @@ class SlotMachine extends PositionComponent {
   bool thirdRollerSpinning = false;
   bool magnificationRollerSpinning = false;
   bool isCanSpin = true;
+
+  late SpriteComponent systemExplanation;
 
   @override
   Future<void> onLoad() async {
@@ -275,9 +278,9 @@ class SlotMachine extends PositionComponent {
   //初始化
   Future<void> init() async {
     exBgSpriteComponent = ExBgButton(onTap: (value){
-      if(value){
+      Map map = value;
+      if(map['switchSprite']){
         Parameter.isOpenExMode = true;
-        exTag = ExTag();
         add(exTag);
         add(ExAnimation());
         Future.delayed(const Duration(seconds: 1), () {
@@ -285,8 +288,26 @@ class SlotMachine extends PositionComponent {
         });
       }else{
         Parameter.isOpenExMode = false;
-        remove(exTag);
-        slotMachineMagnificationRoller.revertRoller();
+        if(exTag.isMounted){
+          remove(exTag);
+          slotMachineMagnificationRoller.revertRoller();
+        }
+      }
+      if(map['exQuestionSprite']){
+        if(!isOpenExButton){
+          isOpenExButton = !isOpenExButton;
+          openExButton();
+          Future.delayed(const Duration(milliseconds: 350), () {
+            add(systemExplanation);
+          });
+        }else{
+          add(systemExplanation);
+        }
+
+      }else{
+        if(systemExplanation.isMounted){
+          remove(systemExplanation);
+        }
       }
     });
 
@@ -314,8 +335,8 @@ class SlotMachine extends PositionComponent {
     // slotMachineBlocksRollerThirdEffectController = RepeatedEffectController(LinearEffectController(0.15), 15);
     // slotMachineMagnificationRollerEffectController = RepeatedEffectController(LinearEffectController(0.15), 18);
 
-    eXButtonOpenEffectController = LinearEffectController(0.55);
-    eXButtonCloseEffectController = LinearEffectController(0.55);
+    eXButtonOpenEffectController = LinearEffectController(0.35);
+    eXButtonCloseEffectController = LinearEffectController(0.35);
 
     //方块行放入一个List，方便之后操作
     rollersList.add(blocksRollerFirst);
@@ -394,6 +415,8 @@ class SlotMachine extends PositionComponent {
         startSpinning();
       }
     });
+    exTag = ExTag();
+    systemExplanation = SystemExplanation();
 
   }
 
