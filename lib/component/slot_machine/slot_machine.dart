@@ -482,6 +482,9 @@ class SlotMachine extends PositionComponent {
         Vector2(exBgSpriteComponent.position.x-203, exBgSpriteComponent.position.y),
         eXButtonCloseEffectController);
     exBgSpriteComponent.add(exButtonCloseMoveEffect);
+    if(systemExplanation.isMounted){
+      remove(systemExplanation);
+    }
   }
 
   @override
