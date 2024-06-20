@@ -285,15 +285,18 @@ class SlotMachine extends PositionComponent {
   Future<void> init() async {
     exBgSpriteComponent = ExBgButton(onTap: (value){
       Map map = value;
-      if(map['switchSprite']){
+      if(map['switchSprite'] && !Parameter.isOpenExMode){
         Parameter.isOpenExMode = true;
+        slotMachineBlocksFirstRoller.changeExMode(0);
+        slotMachineBlocksSecondRoller.changeExMode(1);
+        slotMachineBlocksThirdRoller.changeExMode(2);
         exTag = ExTag();
         add(exTag);
         add(ExAnimation());
         Future.delayed(const Duration(seconds: 1), () {
           changeExMode();
         });
-      }else{
+      }else if( !map['switchSprite'] && Parameter.isOpenExMode){
         Parameter.isOpenExMode = false;
         if(exTag.isMounted){
           // List a = exTag.children.toList();
@@ -1082,9 +1085,6 @@ class SlotMachine extends PositionComponent {
 
   void changeExMode(){
     slotMachineMagnificationRoller.changeExMode();
-    slotMachineBlocksFirstRoller.changeExMode(0);
-    slotMachineBlocksSecondRoller.changeExMode(1);
-    slotMachineBlocksThirdRoller.changeExMode(2);
   }
 
   void showMagnificationBlock(){
