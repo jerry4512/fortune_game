@@ -7,7 +7,7 @@ typedef OnTap = void Function(String);
 
 class BetButton extends SpriteComponent with TapCallbacks{
   final OnTap onTap;
-  BetButton({required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(-130,280),size: Vector2(50,50));
+  BetButton({required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(-130,280),size: Vector2(50,50),priority: 2);
 
   late SpriteComponent spriteComponent;
 
