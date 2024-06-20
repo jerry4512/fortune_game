@@ -51,7 +51,6 @@ class SlotMachineRollerBlock extends SpriteComponent {
 
   Future<void> addMask() async {
     await add(rectangleComponent);
-
   }
 
   void removeMask(){

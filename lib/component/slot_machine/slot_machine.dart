@@ -950,7 +950,7 @@ class SlotMachine extends PositionComponent {
         result = result+getPointsList[i];
       }
       roundWinPoints = result.toString();
-      // showWinHint(roundWinPoints);
+      showWinHint(roundWinPoints);
       resetRoundWinComponents();
       balance = (int.parse(balance) + result).toString();
       print('balance:$balance');
@@ -962,7 +962,6 @@ class SlotMachine extends PositionComponent {
       );
       add(balanceTextComponent);
     }
-    isCanSpin = true;
   }
 
   Future<void> blocksAddMask()async {
