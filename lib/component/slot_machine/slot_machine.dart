@@ -293,6 +293,22 @@ class SlotMachine extends PositionComponent {
         exTag = ExTag();
         add(exTag);
         add(ExAnimation());
+        //移除所有winLine
+        for(int i = 0;i<winLines.length;i++){
+          if(winLines[i].isMounted){
+            remove(winLines[i]);
+          }
+        }
+        for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
+            SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
+            SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
+            SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
+            SlotMachineRollerBlock slotMachineMagnificationRollerBlock = slotMachineMagnificationRoller.blocksRoller[i];
+            slotMachineRollerFirstBlock.removeMask();
+            slotMachineRollerSecondBlock.removeMask();
+            slotMachineRollerThirdBlock.removeMask();
+            slotMachineMagnificationRollerBlock.removeMask();
+        }
         Future.delayed(const Duration(seconds: 1), () {
           changeExMode();
         });
@@ -306,6 +322,16 @@ class SlotMachine extends PositionComponent {
           slotMachineBlocksFirstRoller.revertRoller();
           slotMachineBlocksSecondRoller.revertRoller();
           slotMachineBlocksThirdRoller.revertRoller();
+          for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
+            SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
+            SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
+            SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
+            SlotMachineRollerBlock slotMachineMagnificationRollerBlock = slotMachineMagnificationRoller.blocksRoller[i];
+            slotMachineRollerFirstBlock.removeMask();
+            slotMachineRollerSecondBlock.removeMask();
+            slotMachineRollerThirdBlock.removeMask();
+            slotMachineMagnificationRollerBlock.removeMask();
+          }
         }
       }
       if(map['exQuestionSprite']){

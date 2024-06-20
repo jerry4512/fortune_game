@@ -55,7 +55,9 @@ class SlotMachineRollerBlock extends SpriteComponent {
 
   void removeMask(){
     Future.delayed(const Duration(milliseconds: 50), () {
-      remove(rectangleComponent);
+      if(rectangleComponent.isMounted){
+        remove(rectangleComponent);
+      }
     });
   }
 
