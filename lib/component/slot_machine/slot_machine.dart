@@ -526,10 +526,10 @@ class SlotMachine extends PositionComponent {
     if(int.parse(bettingAmount) <= int.parse(balance)){
       if(isCanSpin){
         isCanSpin = false;
-        final dio = Dio();
-        final response = await dio.post('https://fortune-game-server.zeabur.app/bet/normal-game');
-        BettingResultModel bettingResultModel = BettingResultModel.fromJson(response.data);
-        print(bettingResultModel);
+        // final dio = Dio();
+        // final response = await dio.post('https://fortune-game-server.zeabur.app/bet/normal-game');
+        // BettingResultModel bettingResultModel = BettingResultModel.fromJson(response.data);
+        // print(bettingResultModel);
 
         roundWinPoints = '0';
         firstRollerSpinning = true;
