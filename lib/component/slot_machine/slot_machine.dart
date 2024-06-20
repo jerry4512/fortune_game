@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame_spine/flame_spine.dart';
 import 'package:flutter/material.dart';
 import 'package:fortune_game/component/button/auto_spin_button.dart';
 import 'package:fortune_game/component/button/bet_button.dart';
@@ -286,6 +287,7 @@ class SlotMachine extends PositionComponent {
       Map map = value;
       if(map['switchSprite']){
         Parameter.isOpenExMode = true;
+        exTag = ExTag();
         add(exTag);
         add(ExAnimation());
         Future.delayed(const Duration(seconds: 1), () {
@@ -294,8 +296,13 @@ class SlotMachine extends PositionComponent {
       }else{
         Parameter.isOpenExMode = false;
         if(exTag.isMounted){
+          // List a = exTag.children.toList();
+          // print(a);
           remove(exTag);
           slotMachineMagnificationRoller.revertRoller();
+          slotMachineBlocksFirstRoller.revertRoller();
+          slotMachineBlocksSecondRoller.revertRoller();
+          slotMachineBlocksThirdRoller.revertRoller();
         }
       }
       if(map['exQuestionSprite']){
@@ -542,6 +549,9 @@ class SlotMachine extends PositionComponent {
         thirdRollerSpinning = true;
         magnificationRollerSpinning = true;
         slotMachineMagnificationRoller.defaultBlocks = [];
+        slotMachineBlocksFirstRoller.defaultBlocks = [];
+        slotMachineBlocksSecondRoller.defaultBlocks = [];
+        slotMachineBlocksThirdRoller.defaultBlocks = [];
         resetRoundWinComponents();
         print('单次转动');
         print('开始转动');
@@ -1072,6 +1082,9 @@ class SlotMachine extends PositionComponent {
 
   void changeExMode(){
     slotMachineMagnificationRoller.changeExMode();
+    slotMachineBlocksFirstRoller.changeExMode(0);
+    slotMachineBlocksSecondRoller.changeExMode(1);
+    slotMachineBlocksThirdRoller.changeExMode(2);
   }
 
   void showMagnificationBlock(){

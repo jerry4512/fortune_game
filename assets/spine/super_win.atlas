@@ -1,0 +1,52 @@
+super_win.png
+size:1995,834
+filter:Linear,Linear
+pma:true
+01
+bounds:1468,160,158,131
+rotate:90
+02
+bounds:1468,5,153,134
+rotate:90
+03
+bounds:809,191,168,127
+04
+bounds:604,13,178,130
+05
+bounds:619,152,188,166
+06
+bounds:1334,161,157,132
+rotate:90
+07
+bounds:1334,2,157,132
+rotate:90
+08
+bounds:950,27,162,129
+rotate:90
+09
+bounds:784,13,164,137
+aurora01
+bounds:2,320,512,512
+aurora02
+bounds:516,320,512,512
+blin01
+bounds:979,254,64,64
+super_win_aurora
+bounds:1030,320,512,512
+圖層 3
+bounds:2,145,615,173
+offsets:4,0,619,173
+圖層 5
+bounds:2,5,305,138
+offsets:6,1,317,141
+圖層 7
+bounds:1604,28,353,449
+圖層 7 拷貝
+bounds:1544,479,353,449
+rotate:90
+圖層 8
+bounds:309,8,135,293
+rotate:90
+圖層 9
+bounds:1081,18,300,251
+rotate:90

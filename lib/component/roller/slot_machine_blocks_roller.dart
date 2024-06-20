@@ -19,6 +19,9 @@ class SlotMachineBlocksRoller extends PositionComponent{
 
   late RectangleComponent rectangleComponent;
 
+  List<SlotMachineRollerBlock> defaultBlocks = [];
+
+
   @override
   void onLoad() async {
     for(int i = 0 ; i < blocksRoller.length; i++){
@@ -119,6 +122,65 @@ class SlotMachineBlocksRoller extends PositionComponent{
         rollerIndex: i,
       );
       blocks.add(block);
+    }
+  }
+
+  void changeExMode(int indexRoller){
+    removeAll(components);
+    for(int i = 0 ; i < blocksRoller.length; i++){
+      print( blocksRoller[i].image);
+    }
+    defaultBlocks = blocksRoller;
+    blocksRoller = [];
+    newBlocks = [];
+    components = [];
+
+    for (int i = 0; i < 5; i++) {
+      if(indexRoller == 0){
+        var block = SlotMachineRollerBlock(
+          image: 'blocks/symbol_wild.png',
+          anchor: Anchor.topCenter,
+          position: SymbolBlocks().blocksPositions[i],
+          blockType: BlockType.block,
+          rollerIndex: i,
+        );
+        newBlocks.add(block);
+      }else if(indexRoller == 1){
+        var block = SlotMachineRollerBlock(
+          image: 'blocks/symbol_h1.png',
+          anchor: Anchor.topCenter,
+          position: SymbolBlocks().blocksPositions[i],
+          blockType: BlockType.block,
+          rollerIndex: i,
+        );
+        newBlocks.add(block);
+      }else{
+        var block = SlotMachineRollerBlock(
+          image: 'blocks/symbol_h2.png',
+          anchor: Anchor.topCenter,
+          position: SymbolBlocks().blocksPositions[i],
+          blockType: BlockType.block,
+          rollerIndex: i,
+        );
+        newBlocks.add(block);
+      }
+    }
+    for(int i = 0 ; i < newBlocks.length; i++){
+      components.add(newBlocks[i]);
+    }
+    blocksRoller = newBlocks;
+    addAll(components);
+  }
+
+  void revertRoller(){
+    if(defaultBlocks.isNotEmpty){
+      removeAll(components);
+      blocksRoller = defaultBlocks;
+      components = [];
+      for(int i = 0 ; i < defaultBlocks.length; i++){
+        components.add(defaultBlocks[i]);
+      }
+      addAll(components);
     }
   }
 

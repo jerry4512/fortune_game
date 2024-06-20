@@ -1,0 +1,48 @@
+big_win.png
+size:1587,1037
+filter:Linear,Linear
+pma:true
+01
+bounds:641,35,158,131
+02
+bounds:168,32,153,134
+03
+bounds:965,4,168,127
+04
+bounds:1389,31,178,130
+rotate:90
+05
+bounds:1199,15,188,166
+06
+bounds:323,34,157,132
+07
+bounds:482,34,157,132
+08
+bounds:801,2,162,129
+09
+bounds:2,29,164,137
+aurora01
+bounds:2,523,512,512
+aurora02
+bounds:516,523,512,512
+big_win_aurora
+bounds:1030,523,512,512
+blin01
+bounds:1521,145,64,64
+圖層 2
+bounds:1206,183,338,181
+rotate:90
+圖層 6
+bounds:1389,211,310,142
+rotate:90
+圖層 7
+bounds:453,168,353,449
+rotate:90
+圖層 7 拷貝
+bounds:2,168,353,449
+rotate:90
+圖層 8
+bounds:904,133,135,293
+rotate:90
+圖層 9
+bounds:904,270,300,251
