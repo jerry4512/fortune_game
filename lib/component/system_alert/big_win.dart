@@ -4,6 +4,7 @@ import 'package:flame/events.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fortune_game/component/sprite_number_component/sprite_number_component.dart';
 import 'package:fortune_game/component/system_alert/big_win_line_hint.dart';
 import 'package:fortune_game/component/system_alert/confirm_button.dart';
 

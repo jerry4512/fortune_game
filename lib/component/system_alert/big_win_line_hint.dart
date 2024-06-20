@@ -47,7 +47,7 @@ class BigWinLineHint extends SpriteComponent with TapCallbacks{
 
   init(){
     _winNumber = SpriteNumberComponent(
-      srcDirPath: 'image_numbers/yellow_white_number',
+      srcDirPath: 'image_numbers/banner_numbers',
       anchor: Anchor.center,
       position: Vector2((size.x / 2),250),
       initNum: 0,

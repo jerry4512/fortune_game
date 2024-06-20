@@ -51,6 +51,43 @@ class SlotMachineBlocksRoller extends PositionComponent{
     newBlocks = [];
     components = [];
     addBlocks(newBlocks,BlockType.block);
+    // newBlocks = [
+    //   SlotMachineRollerBlock(
+    //     image: 'blocks/symbol_wild.png',
+    //     anchor: Anchor.topCenter,
+    //     position: blocksPositions[0],
+    //     blockType: BlockType.block,
+    //     rollerIndex: 0,
+    //   ),
+    //   SlotMachineRollerBlock(
+    //     image: 'blocks/symbol_wild.png',
+    //     anchor: Anchor.topCenter,
+    //     position: blocksPositions[1],
+    //     blockType: BlockType.block,
+    //     rollerIndex: 1,
+    //   ),
+    //   SlotMachineRollerBlock(
+    //     image: 'blocks/symbol_wild.png',
+    //     anchor: Anchor.topCenter,
+    //     position: blocksPositions[2],
+    //     blockType: BlockType.block,
+    //     rollerIndex: 2,
+    //   ),
+    //   SlotMachineRollerBlock(
+    //     image: 'blocks/symbol_wild.png',
+    //     anchor: Anchor.topCenter,
+    //     position: blocksPositions[3],
+    //     blockType: BlockType.block,
+    //     rollerIndex: 3,
+    //   ),
+    //   SlotMachineRollerBlock(
+    //     image: 'blocks/symbol_wild.png',
+    //     anchor: Anchor.topCenter,
+    //     position: blocksPositions[4],
+    //     blockType: BlockType.block,
+    //     rollerIndex: 4,
+    //   ),
+    // ];
     for(int i = 0 ; i < newBlocks.length; i++){
       components.add(newBlocks[i]);
     }

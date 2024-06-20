@@ -44,7 +44,7 @@ class SlotMachineRollerBlock extends SpriteComponent {
       size = Vector2(125,93);
     }
 
-    rectangleComponent = RectangleComponent(size: size, paint: Paint()..color = Colors.black.withOpacity(0.5));
+    rectangleComponent = RectangleComponent(size: Vector2(174,142),scale: Vector2(1.2,1.2), paint: Paint()..color = Colors.black.withOpacity(0.5));
 
     super.onLoad();
   }

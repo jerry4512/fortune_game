@@ -71,7 +71,9 @@ flutter:
     - assets/images/lines/
     - assets/images/win_hint/
     - assets/images/win_line_hint_blocks/
-    - assets/images/image_numbers/yellow_white_number/
+    - assets/images/image_numbers/banner_numbers/
+    - assets/images/image_numbers/total_score_numbers/
+    - assets/images/image_numbers/compensation_numbers/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

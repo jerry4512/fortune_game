@@ -6,13 +6,14 @@ import 'package:flame/geometry.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fortune_game/component/sprite_number_component/sprite_number_component.dart';
 
 
 class FrameWinBg extends SpriteComponent with TapCallbacks{
   final String score;
   final String bettingOdds;
 
-  FrameWinBg({required this.score,required this.bettingOdds}) : super(anchor: Anchor.center,position: Vector2(-50,55));
+  FrameWinBg({required this.score,required this.bettingOdds}) : super(anchor: Anchor.center,position: Vector2(-60,55));
 
   late TextComponent contentTextComponent;
 
@@ -29,19 +30,12 @@ class FrameWinBg extends SpriteComponent with TapCallbacks{
     );
     add(scaleEffect);
 
-    contentTextComponent = TextComponent(
-      textRenderer: TextPaint(
-        style : const TextStyle(
-          fontSize: 50,
-          color: Color.fromRGBO(237, 168, 43, 1)
-        )
-      ),
-      text: score,
+    add(SpriteNumberComponent(
+      srcDirPath: 'image_numbers/total_score_numbers',
       anchor: Anchor.center,
       position: Vector2(150,55),
-      priority: 2
-    );
-    add(contentTextComponent);
+      initNum: int.parse(score),
+    ));
 
     super.onLoad();
   }

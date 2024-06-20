@@ -271,6 +271,11 @@ class SlotMachine extends PositionComponent {
     );
     add(balanceTextComponent);
 
+    // frameWinBg = FrameWinBg(score: "200", bettingOdds: bettingAmount);
+    // add(frameWinBg);
+    // lineHint = LineHint(block: '', bettingOdds: '1', lines: '1', score: '999');
+    // add(lineHint);
+
 
     super.onLoad();
   }
@@ -945,7 +950,7 @@ class SlotMachine extends PositionComponent {
         result = result+getPointsList[i];
       }
       roundWinPoints = result.toString();
-      showWinHint(roundWinPoints);
+      // showWinHint(roundWinPoints);
       resetRoundWinComponents();
       balance = (int.parse(balance) + result).toString();
       print('balance:$balance');
@@ -957,6 +962,7 @@ class SlotMachine extends PositionComponent {
       );
       add(balanceTextComponent);
     }
+    isCanSpin = true;
   }
 
   Future<void> blocksAddMask()async {
