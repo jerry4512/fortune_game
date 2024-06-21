@@ -157,6 +157,7 @@ class SlotMachineMagnificationRoller extends PositionComponent with HasGameRef {
       blocksRoller = defaultBlocks;
       components = [];
       for(int i = 0 ; i < defaultBlocks.length; i++){
+        defaultBlocks[i].removeMask();
         components.add(defaultBlocks[i]);
       }
       addAll(components);

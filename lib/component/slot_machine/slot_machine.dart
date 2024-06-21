@@ -322,16 +322,16 @@ class SlotMachine extends PositionComponent {
           slotMachineBlocksFirstRoller.revertRoller();
           slotMachineBlocksSecondRoller.revertRoller();
           slotMachineBlocksThirdRoller.revertRoller();
-          for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
-            SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
-            SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
-            SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
-            SlotMachineRollerBlock slotMachineMagnificationRollerBlock = slotMachineMagnificationRoller.blocksRoller[i];
-            slotMachineRollerFirstBlock.removeMask();
-            slotMachineRollerSecondBlock.removeMask();
-            slotMachineRollerThirdBlock.removeMask();
-            slotMachineMagnificationRollerBlock.removeMask();
-          }
+          // for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
+          //   SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
+          //   SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
+          //   SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
+          //   SlotMachineRollerBlock slotMachineMagnificationRollerBlock = slotMachineMagnificationRoller.blocksRoller[i];
+          //   slotMachineRollerFirstBlock.removeMask();
+          //   slotMachineRollerSecondBlock.removeMask();
+          //   slotMachineRollerThirdBlock.removeMask();
+          //   slotMachineMagnificationRollerBlock.removeMask();
+          // }
         }
       }
       if(map['exQuestionSprite']){
