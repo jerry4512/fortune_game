@@ -1194,6 +1194,9 @@ class SlotMachine extends PositionComponent {
             remove(frameWinBg);
             frameWinBg = FrameWinBg(score: totalWinAmount, bettingOdds: bettingAmount, needAnimation: false);
             add(frameWinBg);
+            Future.delayed(const Duration(milliseconds: 1300), () {
+              remove(frameWinBg);
+            });
             winSlotMachineRollerMagnificationBlock.removeAll(exBgSpriteComponent.children.whereType<Effect>());
             remove(winSlotMachineRollerMagnificationBlock);
           });
