@@ -1086,11 +1086,12 @@ class SlotMachine extends PositionComponent {
     gameResultsList.forEach((gameResult) => showLine(gameResult.line));
 
     //显示奖励金额
+    int ratio = gameResponse.resultMap.detail[0].ratio;
     int totalWinAmount = gameResponse.resultMap.totalWinAmount;
     roundWinPoints = totalWinAmount.toString();
     int bettingAmountInt = gameResponse.resultMap.betAmount;
     bettingAmount = bettingAmountInt.toString();
-    frameWinBg = FrameWinBg(score: roundWinPoints, bettingOdds: bettingAmount);
+    frameWinBg = FrameWinBg(score: (totalWinAmount/ratio).toString(), bettingOdds: bettingAmount, needAnimation: true);
     add(frameWinBg);
 
     //显示奖励金额横幅
@@ -1121,11 +1122,11 @@ class SlotMachine extends PositionComponent {
       int odd = value['odd'];
       double result1 = (odd/5);
       double showOdd = result1* int.parse(bettingAmount);
-      LineHint lineHint = LineHint(block: key, magnification:  gameResponse.resultMap.detail[0].ratio.toString(),bettingOdds: showOdd.toString(), lines: count.toString(), score: amount.toString(), lineHintCount: lineHintCount);
+      LineHint lineHint = LineHint(block: key, magnification: ratio.toString(),bettingOdds: showOdd.toString(), lines: count.toString(), score: amount.toString(), lineHintCount: lineHintCount);
       add(lineHint);
       lineHintCount++;
     });
-    showMagnificationBlock();
+    showMagnificationBlock(totalWinAmount.toString());
 
     await Future.delayed(Duration(seconds: 3));
     if(totalWinAmount >= bettingAmountInt*5){
@@ -1182,7 +1183,7 @@ class SlotMachine extends PositionComponent {
   }
 
   //成功连线后倍率方块的动画效果
-  void showMagnificationBlock(){
+  void showMagnificationBlock(String totalWinAmount){
     SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[3];
     winSlotMachineRollerMagnificationBlock = WinMagnificationBlock(image: slotMachineRollerMagnificationBlock.image);
     add(winSlotMachineRollerMagnificationBlock);
@@ -1190,6 +1191,9 @@ class SlotMachine extends PositionComponent {
       EffectController effectController = EffectController(duration: 0.7, curve: Curves.linear);
       MoveEffect moveEffect = MoveEffect.to(Vector2(winSlotMachineRollerMagnificationBlock.position.x-270, winSlotMachineRollerMagnificationBlock.position.y),
           effectController,onComplete: (){
+            remove(frameWinBg);
+            frameWinBg = FrameWinBg(score: totalWinAmount, bettingOdds: bettingAmount, needAnimation: false);
+            add(frameWinBg);
             winSlotMachineRollerMagnificationBlock.removeAll(exBgSpriteComponent.children.whereType<Effect>());
             remove(winSlotMachineRollerMagnificationBlock);
           });
