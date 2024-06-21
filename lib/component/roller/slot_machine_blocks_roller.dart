@@ -4,6 +4,8 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
+import 'package:fortune_game/models/game_response_model.dart';
+import 'package:fortune_game/symbol/demo_json.dart';
 import 'package:fortune_game/symbol/enum.dart';
 import 'package:fortune_game/symbol/symbol_blocks.dart';
 
@@ -45,6 +47,135 @@ class SlotMachineBlocksRoller extends PositionComponent{
   void onRemove() {
     removeAll(children);
     super.onRemove();
+  }
+
+  //最后结果
+  void getLastResultBlocks(int count,RollerType rollerType){
+    List demoJsonList = DemoJson().demoJsonList;
+    bool useListIndexOne = determineEven(count);
+    GameResponse gameResponse;
+    if(useListIndexOne){
+      gameResponse = GameResponse.fromJson(demoJsonList[0]);
+    }else{
+      gameResponse = GameResponse.fromJson(demoJsonList[1]);
+    }
+    removeAll(components);
+    blocksRoller = [];
+    newBlocks = [];
+    components = [];
+    List<String> defaultBlocksImageList = SymbolBlocks().blocksImageList;
+    List<Vector2> positions = blocksPositions;
+    BlockType blockType = BlockType.block;
+    List<String> panel  = gameResponse.resultMap.detail[0].panel;
+    print(panel);
+    Random random = Random();
+    int index = random.nextInt(defaultBlocksImageList.length);
+    int panelFirstIndex = 0;
+    int panelSecondIndex = 1;
+    int panelThirdIndex = 2;
+    if(rollerType == RollerType.firstRoller){
+      //第一行
+      for (int i = 0; i < 5; i++) {
+        if(i>=2){
+          var block = SlotMachineRollerBlock(
+            image: imagePath(defaultBlocksImageList,panel[panelFirstIndex]),
+            anchor: Anchor.topCenter,
+            position: positions[i],
+            blockType: blockType,
+            rollerIndex: i,
+          );
+          newBlocks.add(block);
+          panelFirstIndex = panelFirstIndex+3;
+          print(panelFirstIndex);
+        }else{
+          //隐藏的两个方块（随机）
+          var block = SlotMachineRollerBlock(
+            image: defaultBlocksImageList[index],
+            anchor: Anchor.topCenter,
+            position: positions[i],
+            blockType: blockType,
+            rollerIndex: i,
+          );
+          newBlocks.add(block);
+        }
+      }
+    }else if(rollerType == RollerType.secondRoller){
+      //第二行
+      for (int i = 0; i < 5; i++) {
+        if(i>=2){
+          var block = SlotMachineRollerBlock(
+            image: imagePath(defaultBlocksImageList,panel[panelSecondIndex]),
+            anchor: Anchor.topCenter,
+            position: positions[i],
+            blockType: blockType,
+            rollerIndex: i,
+          );
+          newBlocks.add(block);
+          panelSecondIndex = panelSecondIndex+3;
+        }else{
+          //隐藏的两个方块（随机）
+          var block = SlotMachineRollerBlock(
+            image: defaultBlocksImageList[index],
+            anchor: Anchor.topCenter,
+            position: positions[i],
+            blockType: blockType,
+            rollerIndex: i,
+          );
+          newBlocks.add(block);
+        }
+      }
+    }else{
+      //第三行
+      for (int i = 0; i < 5; i++) {
+        if(i>=2){
+          var block = SlotMachineRollerBlock(
+            image: imagePath(defaultBlocksImageList,panel[panelThirdIndex]),
+            anchor: Anchor.topCenter,
+            position: positions[i],
+            blockType: blockType,
+            rollerIndex: i,
+          );
+          newBlocks.add(block);
+          panelThirdIndex = panelThirdIndex+3;
+        }else{
+          //隐藏的两个方块（随机）
+          var block = SlotMachineRollerBlock(
+            image: defaultBlocksImageList[index],
+            anchor: Anchor.topCenter,
+            position: positions[i],
+            blockType: blockType,
+            rollerIndex: i,
+          );
+          newBlocks.add(block);
+        }
+      }
+    }
+    for(int i = 0 ; i < newBlocks.length; i++){
+      components.add(newBlocks[i]);
+    }
+    blocksRoller = newBlocks;
+    addAll(components);
+  }
+
+  String imagePath(List<String> defaultBlocksImageList, String response){
+    String result = '';
+    for(int i =0;i<defaultBlocksImageList.length;i++){
+      if(defaultBlocksImageList[i].contains(response.toLowerCase())){
+        result =defaultBlocksImageList[i];
+        print('----$result----');
+        break;
+      }
+    }
+    return result;
+  }
+
+  //判断是否为偶数（单纯测试区分两次结果）
+  bool determineEven(int number) {
+    if (number % 2 == 0) {
+      return true; // Even
+    } else {
+      return false; // Odd
+    }
   }
 
   //重新生成方块，未来可接API最后资料

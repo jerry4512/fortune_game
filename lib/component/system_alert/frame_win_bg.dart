@@ -37,6 +37,10 @@ class FrameWinBg extends SpriteComponent with TapCallbacks{
       initNum: int.parse(score),
     ));
 
+    Future.delayed(const Duration(seconds: 3), () {
+      removeFromParent();
+    });
+
     super.onLoad();
   }
 

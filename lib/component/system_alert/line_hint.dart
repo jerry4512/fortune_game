@@ -10,11 +10,13 @@ import 'package:fortune_game/symbol/symbol_blocks.dart';
 
 class LineHint extends SpriteComponent with TapCallbacks{
   String block;
+  String magnification;
   String bettingOdds;
   String lines;
   String score;
+  int lineHintCount;
 
-  LineHint({required this.block,required this.bettingOdds,required this.lines,required this.score}) : super(anchor: Anchor.center, position: Vector2(-60, 200),scale: Vector2(0.8,0.8));
+  LineHint({required this.block, required this.magnification,required this.bettingOdds,required this.lines,required this.score, required this.lineHintCount}) : super(anchor: Anchor.center,scale: Vector2(0.8,0.8));
 
   List<String> magnificationBlockList = [];
 
@@ -28,10 +30,10 @@ class LineHint extends SpriteComponent with TapCallbacks{
     random();
     sprite = await Sprite.load('win_hint/line_hint.png');
     opacity = 0.0;
-
+    position =  Vector2(-60, 200-(lineHintCount*60));
     //方块图片
     add(SpriteComponent(
-        sprite: await Sprite.load(blockImage),
+        sprite: await Sprite.load(getBlockImage(block)),
         anchor: Anchor.center,
         position: Vector2(100,35),
     ));
@@ -81,7 +83,7 @@ class LineHint extends SpriteComponent with TapCallbacks{
 
     //倍率图片
     add(SpriteComponent(
-        sprite: await Sprite.load(magnificationImage),
+        sprite: await Sprite.load(getMagnificationImage(magnification)),
         anchor: Anchor.centerLeft,
         position: getMagnificationPosition()
     ));
@@ -100,6 +102,10 @@ class LineHint extends SpriteComponent with TapCallbacks{
       position: getScorePosition(),
       initNum: int.parse(score),
     ));
+
+    Future.delayed(const Duration(seconds: 3), () {
+      removeFromParent();
+    });
 
 
     super.onLoad();
@@ -244,6 +250,28 @@ class LineHint extends SpriteComponent with TapCallbacks{
     blockImage = SymbolBlocks().winLineHintBlocks[blocksIndex];
     magnificationImage = SymbolBlocks().winLineHintMagnifications[magnificationIndex];
 
+  }
+
+  String getBlockImage(String block){
+    String blockImage = '';
+    List list = SymbolBlocks().winLineHintBlocks;
+    for(int i = 0; i < list.length; i++){
+      if(list[i].contains(block.toLowerCase())){
+        blockImage =  list[i];
+      }
+    }
+    return blockImage;
+  }
+
+  String getMagnificationImage(String magnification){
+    String blockImage = '';
+    List list = SymbolBlocks().winLineHintMagnifications;
+    for(int i = 0; i < list.length; i++){
+      if(list[i].contains(magnification.toLowerCase())){
+        blockImage =  list[i];
+      }
+    }
+    return blockImage;
   }
 
 

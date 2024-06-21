@@ -10,9 +10,10 @@ import 'package:fortune_game/component/system_alert/confirm_button.dart';
 
 class SuperWin extends PositionComponent with TapCallbacks{
 
-  String score;
+  String startNumber;
+  String endNumber;
 
-  SuperWin({required this.score}) : super(anchor: Anchor.center, priority: 2);
+  SuperWin({required this.startNumber, required this.endNumber}) : super(anchor: Anchor.center, priority: 2);
 
   late ScaleEffect scaleEffect;
   late MoveEffect moveEffect;
@@ -32,7 +33,12 @@ class SuperWin extends PositionComponent with TapCallbacks{
 
     add(spriteComponent);
 
-    add(BigWinLineHint(score: score));
+    add(BigWinLineHint(startNumber: startNumber, endNumber: endNumber));
+
+    Future.delayed(const Duration(seconds: 3), () {
+      removeFromParent();
+    });
+
 
 
 

@@ -9,13 +9,13 @@ import 'package:fortune_game/component/sprite_number_component/sprite_number_com
 
 
 class BigWinLineHint extends SpriteComponent with TapCallbacks{
-  String score;
 
-
+  String startNumber;
+  String endNumber;
   //Win 數字，拿來跳動倒數
   SpriteNumberComponent? _winNumber;
 
-  BigWinLineHint({required this.score}) : super(anchor: Anchor.center, position: Vector2(0, 0),scale: Vector2(0.6,0.6));
+  BigWinLineHint({required this.startNumber, required this.endNumber}) : super(anchor: Anchor.center, position: Vector2(0, 0),scale: Vector2(0.6,0.6));
 
   @override
   void onLoad() async {
@@ -37,7 +37,7 @@ class BigWinLineHint extends SpriteComponent with TapCallbacks{
     //     priority: 2
     // ));
     Future.delayed(const Duration(milliseconds: 500), () {
-      _winNumber?.tickTo(int.parse(score),duration: const Duration(milliseconds: 2500));
+      _winNumber?.tickTo(int.parse(endNumber),duration: const Duration(milliseconds: 2500));
     });
 
 
@@ -50,7 +50,7 @@ class BigWinLineHint extends SpriteComponent with TapCallbacks{
       srcDirPath: 'image_numbers/banner_numbers',
       anchor: Anchor.center,
       position: Vector2((size.x / 2),250),
-      initNum: 0,
+      initNum: int.parse(startNumber),
     );
   }
 

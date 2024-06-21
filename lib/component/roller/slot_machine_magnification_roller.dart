@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
+import 'package:fortune_game/models/game_response_model.dart';
+import 'package:fortune_game/symbol/demo_json.dart';
 import 'package:fortune_game/symbol/enum.dart';
 import 'package:fortune_game/symbol/parameter.dart';
 import 'package:fortune_game/symbol/symbol_blocks.dart';
@@ -85,7 +87,75 @@ class SlotMachineMagnificationRoller extends PositionComponent with HasGameRef {
       blocks.add(block);
     }
   }
+  //最后结果
+  void getLastResultBlocks(int count,RollerType rollerType){
+    List demoJsonList = DemoJson().demoJsonList;
+    bool useListIndexOne = determineEven(count);
+    GameResponse gameResponse;
+    if(useListIndexOne){
+      gameResponse = GameResponse.fromJson(demoJsonList[0]);
+    }else{
+      gameResponse = GameResponse.fromJson(demoJsonList[1]);
+    }
+    removeAll(components);
+    blocksRoller = [];
+    newBlocks = [];
+    components = [];
+    List<String> defaultBlocksImageList = SymbolBlocks().magnificationImageList;
+    Random random = Random();
+    for (int i = 0; i < 5; i++) {
+      // 随机选择一个索引
+      int index = random.nextInt(defaultBlocksImageList.length);
+      // 获取这个索引对应的图片并添加到列表中
+      if(i == 3){
+        var block = SlotMachineRollerBlock(
+          image: imagePath(defaultBlocksImageList,gameResponse.resultMap.detail[0].ratio.toString()),
+          anchor: Anchor.topCenter,
+          position: SymbolBlocks().magnificationPositions[i],
+          blockType: BlockType.magnification,
+          rollerIndex: i,
+        );
+        newBlocks.add(block);
+      }else{
+        var block = SlotMachineRollerBlock(
+          image: defaultBlocksImageList[index],
+          anchor: Anchor.topCenter,
+          position: SymbolBlocks().magnificationPositions[i],
+          blockType: BlockType.magnification,
+          rollerIndex: i,
+        );
+        newBlocks.add(block);
+      }
+    }
 
+
+    for(int i = 0 ; i < newBlocks.length; i++){
+      components.add(newBlocks[i]);
+    }
+    blocksRoller = newBlocks;
+    addAll(components);
+  }
+
+  String imagePath(List<String> defaultBlocksImageList, String response){
+    String result = '';
+    for(int i =0;i<defaultBlocksImageList.length;i++){
+      if(defaultBlocksImageList[i].contains(response)){
+        result =defaultBlocksImageList[i];
+        print('----$result----');
+        break;
+      }
+    }
+    return result;
+  }
+
+  //判断是否为偶数（单纯测试区分两次结果）
+  bool determineEven(int number) {
+    if (number % 2 == 0) {
+      return true; // Even
+    } else {
+      return false; // Odd
+    }
+  }
   void changeExMode(){
     removeAll(components);
     for(int i = 0 ; i < blocksRoller.length; i++){

@@ -41,3 +41,4 @@ enum RollerType {
   thirdRoller,
   magnificationRoller
 }
+
