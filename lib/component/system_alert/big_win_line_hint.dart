@@ -37,7 +37,7 @@ class BigWinLineHint extends SpriteComponent with TapCallbacks{
     //     priority: 2
     // ));
     Future.delayed(const Duration(milliseconds: 500), () {
-      _winNumber?.tickTo(int.parse(endNumber),duration: const Duration(milliseconds: 2500));
+      _winNumber?.tickTo(int.parse(endNumber),duration: const Duration(milliseconds: 8500));
     });
 
 

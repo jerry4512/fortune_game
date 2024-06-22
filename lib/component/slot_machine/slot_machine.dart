@@ -17,6 +17,7 @@ import 'package:fortune_game/component/roller/slot_machine_magnification_roller.
 import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
 import 'package:fortune_game/component/button/spin_button.dart';
 import 'package:fortune_game/component/roller/win_magnification_block.dart';
+import 'package:fortune_game/component/system_alert/big_mega_super_win.dart';
 import 'package:fortune_game/component/system_alert/big_win.dart';
 import 'package:fortune_game/component/system_alert/frame_win_bg.dart';
 import 'package:fortune_game/component/system_alert/line_hint.dart';
@@ -548,7 +549,7 @@ class SlotMachine extends PositionComponent {
         slotMachineBlocksFirstRoller.defaultBlocks = [];
         slotMachineBlocksSecondRoller.defaultBlocks = [];
         slotMachineBlocksThirdRoller.defaultBlocks = [];
-        resetRoundWinComponents();
+        setRoundWinComponents('0');
         print('单次转动');
         print('开始转动');
         //移除所有winLine
@@ -690,6 +691,8 @@ class SlotMachine extends PositionComponent {
       gameResponse = GameResponse.fromJson(demoJsonList[1]);
     }
     if(gameResponse.resultMap.detail[0].result.isNotEmpty){
+      roundWinPoints = gameResponse.resultMap.totalWinAmount.toString();
+      setRoundWinComponents(roundWinPoints);
       showWinHint(gameResponse);
     }else{
      print('未成功连线');
@@ -1128,6 +1131,11 @@ class SlotMachine extends PositionComponent {
     });
     showMagnificationBlock(totalWinAmount.toString());
 
+    // await Future.delayed(Duration(seconds: 3));
+    // BigMegaSuperWin bigMegaSuperWin = BigMegaSuperWin(startNumber: bettingAmount, endNumber: totalWinAmount.toString(), showCount: 3);
+    // add(bigMegaSuperWin);
+
+
     await Future.delayed(Duration(seconds: 3));
     if(totalWinAmount >= bettingAmountInt*5){
       if(totalWinAmount >= bettingAmountInt*15-1){
@@ -1154,6 +1162,11 @@ class SlotMachine extends PositionComponent {
       add(superWin);
     }
     isCanSpin = true;
+    if(isContinuousSpinning){
+      await Future.delayed(Duration(seconds: 4));
+      startSpinning();
+    }
+
 
   }
 
@@ -1204,11 +1217,11 @@ class SlotMachine extends PositionComponent {
     });
   }
 
-  void resetRoundWinComponents(){
+  void setRoundWinComponents(String text){
     remove(roundWinPointsTextComponent);
     roundWinPointsTextComponent = TextComponent(
       anchor: Anchor.topCenter,
-      text: roundWinPoints,
+      text: text,
       textRenderer: TextPaint(
           style : const TextStyle(
               fontSize: 33,
@@ -1219,34 +1232,6 @@ class SlotMachine extends PositionComponent {
       position: Vector2(0, 213),
     );
     add(roundWinPointsTextComponent);
-  }
-
-  //测试连线后遮罩效果
-  void test(){
-    List list1 = slotMachineBlocksFirstRoller.blocksRoller;
-    for(int i = 0;i<list1.length;i++){
-      SlotMachineRollerBlock block = list1[i];
-      print(block);
-      block.add(RectangleComponent(
-        position:Vector2(0,0),
-          size: Vector2(174,100), paint: Paint()..color = Colors.black.withOpacity(0.3)));
-    }
-
-    List list2 = slotMachineBlocksSecondRoller.blocksRoller;
-    for(int i =0;i<list2.length;i++){
-      SlotMachineRollerBlock block = list2[i];
-      block.add(RectangleComponent(
-          position:Vector2(0,0),
-          size: Vector2(174,100), paint: Paint()..color = Colors.black.withOpacity(0.3)));
-    }
-
-    List list3= slotMachineBlocksThirdRoller.blocksRoller;
-    for(int i =0;i<list3.length;i++){
-      SlotMachineRollerBlock block = list3[i];
-      block.add(RectangleComponent(
-          position:Vector2(0,0),
-          size: Vector2(174,100), paint: Paint()..color = Colors.black.withOpacity(0.3)));
-    }
   }
 
 }
