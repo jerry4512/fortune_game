@@ -685,7 +685,7 @@ class SlotMachine extends PositionComponent {
     List demoJsonList = DemoJson().demoJsonList;
     // bool useListIndexOne = determineEven(count);
     GameResponse gameResponse;
-    gameResponse = GameResponse.fromJson(demoJsonList[ (Parameter.jsonCount + 1) % DemoJson().demoJsonList.length]);
+    gameResponse = GameResponse.fromJson(demoJsonList[Parameter.jsonCount % demoJsonList.length]);
     Parameter.jsonCount++;
     setBalanceTextComponent(gameResponse.resultMap.cashBalance.toString());
     if(gameResponse.resultMap.detail[0].result.isNotEmpty){

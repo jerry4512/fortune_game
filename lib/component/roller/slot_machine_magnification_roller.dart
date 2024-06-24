@@ -92,7 +92,7 @@ class SlotMachineMagnificationRoller extends PositionComponent with HasGameRef {
     List demoJsonList = DemoJson().demoJsonList;
     // bool useListIndexOne = determineEven(count);
     GameResponse gameResponse;
-    gameResponse = GameResponse.fromJson(demoJsonList[ (Parameter.jsonCount + 1) % DemoJson().demoJsonList.length]);
+    gameResponse = GameResponse.fromJson(demoJsonList[Parameter.jsonCount % demoJsonList.length]);
     removeAll(components);
     blocksRoller = [];
     newBlocks = [];
