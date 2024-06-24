@@ -34,7 +34,48 @@ class DemoJson{
       },
       "resultCode": "000"
     },
-    //成功连线
+    //成功连线（小奖）
+    { "msg": "Success",
+      "resultMap": {
+        "issue": "EG01_20240617172220091000052",
+        "gameInfo": "SL_A004",
+        "totalWinAmount": 80,
+        "uuid": "80305bdb-adf7-45ce-8a31-f569ba403eba",
+        "exStatus": 0,
+        "betAmount": 100,
+        "bonusCount": null,
+        "cashBalance": 1000,
+        "detail": [
+          {
+            "panel": [
+              "H1",
+              "H2",
+              "W",
+              "N4",
+              "N4",
+              "N4",
+              "W",
+              "H1",
+              "H3"
+            ],
+            "result": [
+              {
+                "item": "N4",
+                "playResult": 80,
+                "line": 1,
+                "linkCount": 1,
+                "odd": 2
+              }
+            ],
+            "ratio": 2
+          }
+        ],
+        "viewOrderId": "EG01_20240617172220091000052",
+        "status": 1
+      },
+      "resultCode": "000"
+    },
+    //成功连线（大奖）
     {
       "msg": "Success",
       "resultMap": {

@@ -7,4 +7,6 @@ class Parameter {
   static int secondRollerRepeatTimes = 4;
   static int thirdRollerRepeatTimes = 5;
   static int magnificationRollerRepeatTimes = 6;
+
+  static int jsonCount = 0;
 }

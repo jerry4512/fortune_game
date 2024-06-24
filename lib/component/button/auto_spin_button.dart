@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 
-typedef OnTap = void Function();
+typedef OnTap = void Function(bool);
 
 class AutoSpinButton extends SpriteComponent with TapCallbacks{
   final OnTap onTap;
@@ -25,8 +25,8 @@ class AutoSpinButton extends SpriteComponent with TapCallbacks{
 
   @override
   Future<void> onTapDown(TapDownEvent event) async {
-    onTap();
     isQuickSpinning = !isQuickSpinning;
+    onTap(isQuickSpinning);
     if(isQuickSpinning){
       sprite = await Sprite.load('buttons/icon_stop_auto_spin_button.png');
     }else{

@@ -414,7 +414,7 @@ class SlotMachine extends PositionComponent {
       remove(systemAlert);
     });
 
-    autoSpinButton = AutoSpinButton(isQuickSpinning: isQuickSpinning,onTap: (){
+    autoSpinButton = AutoSpinButton(isQuickSpinning: isQuickSpinning,onTap: (value){
       print('连续转动');
       if(isContinuousSpinning){
         isContinuousSpinning = false;
@@ -427,6 +427,7 @@ class SlotMachine extends PositionComponent {
         startSpinning();
       }
     });
+
     exTag = ExTag();
     systemExplanation = SystemExplanation();
 
@@ -682,15 +683,10 @@ class SlotMachine extends PositionComponent {
   //测试假JSON数据
   void newCheckWin(){
     List demoJsonList = DemoJson().demoJsonList;
-    bool useListIndexOne = determineEven(count);
+    // bool useListIndexOne = determineEven(count);
     GameResponse gameResponse;
-    if(useListIndexOne){
-      gameResponse = GameResponse.fromJson(demoJsonList[0]);
-      print(demoJsonList[0].toString());
-    }else{
-      gameResponse = GameResponse.fromJson(demoJsonList[1]);
-      print(demoJsonList[1].toString());
-    }
+    gameResponse = GameResponse.fromJson(demoJsonList[ (Parameter.jsonCount + 1) % DemoJson().demoJsonList.length]);
+    Parameter.jsonCount++;
     setBalanceTextComponent(gameResponse.resultMap.cashBalance.toString());
     if(gameResponse.resultMap.detail[0].result.isNotEmpty){
       roundWinPoints = gameResponse.resultMap.totalWinAmount.toString();
@@ -1148,6 +1144,9 @@ class SlotMachine extends PositionComponent {
         BigWin bigWin = BigWin(startNumber: bettingAmount, endNumber: totalWinAmount.toString());
         add(bigWin);
       }
+    }else{
+      isCanSpin = true;
+      return;
     }
     await Future.delayed(Duration(seconds: 3));
     if(totalWinAmount >= bettingAmountInt*15){

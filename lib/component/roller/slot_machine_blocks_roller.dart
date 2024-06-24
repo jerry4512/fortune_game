@@ -7,6 +7,7 @@ import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
 import 'package:fortune_game/models/game_response_model.dart';
 import 'package:fortune_game/symbol/demo_json.dart';
 import 'package:fortune_game/symbol/enum.dart';
+import 'package:fortune_game/symbol/parameter.dart';
 import 'package:fortune_game/symbol/symbol_blocks.dart';
 
 class SlotMachineBlocksRoller extends PositionComponent{
@@ -52,13 +53,14 @@ class SlotMachineBlocksRoller extends PositionComponent{
   //最后结果
   void getLastResultBlocks(int count,RollerType rollerType){
     List demoJsonList = DemoJson().demoJsonList;
-    bool useListIndexOne = determineEven(count);
+    // bool useListIndexOne = determineEven(count);
     GameResponse gameResponse;
-    if(useListIndexOne){
-      gameResponse = GameResponse.fromJson(demoJsonList[0]);
-    }else{
-      gameResponse = GameResponse.fromJson(demoJsonList[1]);
-    }
+    gameResponse = GameResponse.fromJson(demoJsonList[ (Parameter.jsonCount + 1) % DemoJson().demoJsonList.length]);
+    // if(useListIndexOne){
+    //   gameResponse = GameResponse.fromJson(demoJsonList[0]);
+    // }else{
+    //   gameResponse = GameResponse.fromJson(demoJsonList[1]);
+    // }
     removeAll(components);
     blocksRoller = [];
     newBlocks = [];
