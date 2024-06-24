@@ -86,7 +86,6 @@ class SlotMachineBlocksRoller extends PositionComponent{
           );
           newBlocks.add(block);
           panelFirstIndex = panelFirstIndex+3;
-          print(panelFirstIndex);
         }else{
           //隐藏的两个方块（随机）
           var block = SlotMachineRollerBlock(
@@ -162,7 +161,6 @@ class SlotMachineBlocksRoller extends PositionComponent{
     for(int i =0;i<defaultBlocksImageList.length;i++){
       if(defaultBlocksImageList[i].contains(response.toLowerCase())){
         result =defaultBlocksImageList[i];
-        print('----$result----');
         break;
       }
     }

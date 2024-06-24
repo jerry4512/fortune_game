@@ -1095,7 +1095,7 @@ class SlotMachine extends PositionComponent {
     int bettingAmountInt = gameResponse.resultMap.betAmount;
     bettingAmount = bettingAmountInt.toString();
     frameWinBg = FrameWinBg(score: (totalWinAmount/ratio).toString(), bettingOdds: bettingAmount, needAnimation: true);
-    add(frameWinBg);
+    await add(frameWinBg);
 
     //显示奖励金额横幅
     Map<String,Map> map = {};

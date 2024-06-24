@@ -141,7 +141,6 @@ class SlotMachineMagnificationRoller extends PositionComponent with HasGameRef {
     for(int i =0;i<defaultBlocksImageList.length;i++){
       if(defaultBlocksImageList[i].contains(response)){
         result =defaultBlocksImageList[i];
-        print('----$result----');
         break;
       }
     }
