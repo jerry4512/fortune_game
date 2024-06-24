@@ -687,8 +687,10 @@ class SlotMachine extends PositionComponent {
     GameResponse gameResponse;
     if(useListIndexOne){
       gameResponse = GameResponse.fromJson(demoJsonList[0]);
+      print(demoJsonList[0].toString());
     }else{
       gameResponse = GameResponse.fromJson(demoJsonList[1]);
+      print(demoJsonList[1].toString());
     }
     setBalanceTextComponent(gameResponse.resultMap.cashBalance.toString());
     if(gameResponse.resultMap.detail[0].result.isNotEmpty){
@@ -1096,7 +1098,7 @@ class SlotMachine extends PositionComponent {
     int bettingAmountInt = gameResponse.resultMap.betAmount;
     bettingAmount = bettingAmountInt.toString();
     frameWinBg = FrameWinBg(score: (totalWinAmount/ratio).toString(), bettingOdds: bettingAmount, needAnimation: true);
-    //不知为何第一次会add会比较慢出现，故加入await
+    //不知为何第一次会add会比较慢出现甚至来不及出现，故加入await
     await add(frameWinBg);
 
     //显示奖励金额横幅
