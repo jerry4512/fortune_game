@@ -43,7 +43,6 @@ class SettingButton extends SpriteComponent with TapCallbacks{
         remove(menuSpriteComponent);
       }
     }
-
   }
 
 

@@ -366,9 +366,9 @@ class SlotMachine extends PositionComponent {
     secondComponents =[slotMachineBlocksSecondRoller];
     thirdComponents =[slotMachineBlocksThirdRoller];
 
-    clipComponentFirst = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(-135,-100), size: Vector2(143, 290), children: firstComponents);
-    clipComponentSecond = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(7,-100), size: Vector2(143, 290), children: secondComponents);
-    clipComponentThird = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(149,-100), size: Vector2(143, 290), children: thirdComponents);
+    clipComponentFirst = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(-138,-100), size: Vector2(143, 290), children: firstComponents);
+    clipComponentSecond = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(4,-100), size: Vector2(143, 290), children: secondComponents);
+    clipComponentThird = ClipComponent.rectangle(anchor: Anchor.topRight,position: Vector2(146,-100), size: Vector2(143, 290), children: thirdComponents);
 
     //倍率行
     addBlocks(magnification, BlockType.magnification);
