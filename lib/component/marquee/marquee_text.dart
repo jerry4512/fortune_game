@@ -4,13 +4,12 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:fortune_game/symbol/symbol_blocks.dart';
+import 'package:fortune_game/symbol/symbol_marquee.dart';
 
-typedef OnTap = void Function();
 
 class MarqueeText extends PositionComponent with TapCallbacks{
 
-  final OnTap onTap;
-  MarqueeText({required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(135, -170), size: Vector2(800,60));
+  MarqueeText() : super(anchor: Anchor.topCenter, position: Vector2(135, -170), size: Vector2(800,60));
 
   late EffectController effectController;
   late MoveEffect moveEffect;
@@ -26,12 +25,11 @@ class MarqueeText extends PositionComponent with TapCallbacks{
   void onLoad() async {
     getMarqueeText();
     spriteComponent = SpriteComponent(sprite: await Sprite.load( 'marquees/marquee_text_1.png'));
-    effectController = RepeatedEffectController(LinearEffectController(15), 5);
+    effectController = RepeatedEffectController(LinearEffectController(15), 10);
 
     moveEffect = MoveEffect.to(Vector2(spriteComponent.position.x -1400, spriteComponent.position.y),
         effectController);
     spriteComponent.add(moveEffect);
-
 
     components.add(spriteComponent);
     clipComponent = ClipComponent.rectangle(anchor: Anchor.topCenter,position: Vector2(200,10), size: Vector2(400, 290), children: components);
@@ -39,12 +37,6 @@ class MarqueeText extends PositionComponent with TapCallbacks{
 
     super.onLoad();
   }
-
-  @override
-  void onTapDown(TapDownEvent event) {
-    onTap();
-  }
-
 
   @override
   void update(double dt) {

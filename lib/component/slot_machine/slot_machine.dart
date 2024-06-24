@@ -11,13 +11,12 @@ import 'package:fortune_game/component/button/quick_start_button.dart';
 import 'package:fortune_game/component/button/setting_button.dart';
 import 'package:fortune_game/component/ex_animation/ex_animation.dart';
 import 'package:fortune_game/component/ex_animation/ex_tag.dart';
-import 'package:fortune_game/component/marquee/spin_button.dart';
+import 'package:fortune_game/component/marquee/marquee_text.dart';
 import 'package:fortune_game/component/roller/slot_machine_blocks_roller.dart';
 import 'package:fortune_game/component/roller/slot_machine_magnification_roller.dart';
 import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
 import 'package:fortune_game/component/button/spin_button.dart';
 import 'package:fortune_game/component/roller/win_magnification_block.dart';
-import 'package:fortune_game/component/system_alert/big_mega_super_win.dart';
 import 'package:fortune_game/component/system_alert/big_win.dart';
 import 'package:fortune_game/component/system_alert/frame_win_bg.dart';
 import 'package:fortune_game/component/system_alert/line_hint.dart';
@@ -177,7 +176,7 @@ class SlotMachine extends PositionComponent {
     ));
 
     //跑马灯
-    add(MarqueeText(onTap: (){}));
+    add(MarqueeText());
 
     //拉霸机倍率上面的文字
     add(SpriteComponent(
