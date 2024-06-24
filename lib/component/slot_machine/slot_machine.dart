@@ -1095,6 +1095,7 @@ class SlotMachine extends PositionComponent {
     int bettingAmountInt = gameResponse.resultMap.betAmount;
     bettingAmount = bettingAmountInt.toString();
     frameWinBg = FrameWinBg(score: (totalWinAmount/ratio).toString(), bettingOdds: bettingAmount, needAnimation: true);
+    //不知为何第一次会add会比较慢出现，故加入await
     await add(frameWinBg);
 
     //显示奖励金额横幅
@@ -1161,10 +1162,14 @@ class SlotMachine extends PositionComponent {
       SuperWin superWin = SuperWin(startNumber: (bettingAmountInt*30).toString(), endNumber: totalWinAmount.toString());
       add(superWin);
     }
-    isCanSpin = true;
+
     if(isContinuousSpinning){
       await Future.delayed(Duration(seconds: 4));
+      isCanSpin = true;
       startSpinning();
+    }else{
+      await Future.delayed(Duration(seconds: 3));
+      isCanSpin = true;
     }
 
 
