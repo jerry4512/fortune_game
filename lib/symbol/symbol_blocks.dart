@@ -31,12 +31,12 @@ class SymbolBlocks {
 
   List<Vector2> blocksPositions = [
     //未来显示
-    Vector2(343,-100),
-    Vector2(343,0),
+    Vector2(343,-90),
+    Vector2(343,-10),
     //当前显示
-    Vector2(343,100),
-    Vector2(343,200),
-    Vector2(343,300),
+    Vector2(343,90),
+    Vector2(343,190),
+    Vector2(343,290),
   ];
 
   List<Vector2> magnificationPositions = [
