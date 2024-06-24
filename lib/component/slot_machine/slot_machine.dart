@@ -1145,7 +1145,13 @@ class SlotMachine extends PositionComponent {
         add(bigWin);
       }
     }else{
-      isCanSpin = true;
+      if(isContinuousSpinning){
+        await Future.delayed(Duration(seconds: 2));
+        isCanSpin = true;
+        startSpinning();
+      }else{
+        isCanSpin = true;
+      }
       return;
     }
     await Future.delayed(Duration(seconds: 3));
