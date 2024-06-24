@@ -414,7 +414,7 @@ class SlotMachine extends PositionComponent {
       remove(systemAlert);
     });
 
-    autoSpinButton = AutoSpinButton(isQuickSpinning: isQuickSpinning,onTap: (value){
+    autoSpinButton = AutoSpinButton(isQuickSpinning: isQuickSpinning,onTap: (){
       print('连续转动');
       if(isContinuousSpinning){
         isContinuousSpinning = false;
