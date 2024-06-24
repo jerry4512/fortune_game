@@ -690,6 +690,7 @@ class SlotMachine extends PositionComponent {
     }else{
       gameResponse = GameResponse.fromJson(demoJsonList[1]);
     }
+    setBalanceTextComponent(gameResponse.resultMap.cashBalance.toString());
     if(gameResponse.resultMap.detail[0].result.isNotEmpty){
       roundWinPoints = gameResponse.resultMap.totalWinAmount.toString();
       setRoundWinComponents(roundWinPoints);
@@ -1237,6 +1238,17 @@ class SlotMachine extends PositionComponent {
       position: Vector2(0, 213),
     );
     add(roundWinPointsTextComponent);
+  }
+
+  void setBalanceTextComponent(String text){
+    remove(balanceTextComponent);
+    balanceTextComponent = TextComponent(
+      anchor: Anchor.topCenter,
+      text: 'Balance  $text',
+      scale: Vector2(0.8,0.8),
+      position: Vector2(0, 343),
+    );
+    add(balanceTextComponent);
   }
 
 }
