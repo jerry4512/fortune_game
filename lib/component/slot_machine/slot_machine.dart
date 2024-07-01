@@ -407,12 +407,7 @@ class SlotMachine extends PositionComponent {
 
     autoSpinButton = AutoSpinButton(onTap: (){
       print('连续转动');
-      if(Parameter.isQuickMode){
-        stopSpinning(RollerType.firstRoller);
-        stopSpinning(RollerType.secondRoller);
-        stopSpinning(RollerType.thirdRoller);
-        stopSpinning(RollerType.magnificationRoller);
-      }else{
+      if(!Parameter.isQuickMode){
         startSpinning();
       }
     });
@@ -423,7 +418,7 @@ class SlotMachine extends PositionComponent {
   }
 
   @override
-  void update(double dt) {
+  Future<void> update(double dt) async {
     super.update(dt);
     if(rollerState == RollerState.rolling){
       if(!slotMachineBlocksRollerFirstEffectController.completed){
@@ -463,6 +458,7 @@ class SlotMachine extends PositionComponent {
     if(eXButtonCloseEffectController.completed){
       restExcButtonEffect(exButtonCloseMoveEffect);
     }
+
   }
 
   void restExcButtonEffect(MoveEffect moveEffect){
@@ -647,6 +643,7 @@ class SlotMachine extends PositionComponent {
           secondMoveEffect.reset();
           thirdMoveEffect.reset();
           magnificationMoveEffect.reset();
+          magnificationRollerSpinning = false;
           // checkWin();
           newCheckWin();
           if(Parameter.isQuickMode){
@@ -657,7 +654,6 @@ class SlotMachine extends PositionComponent {
           }
         });
         slotMachineMagnificationRoller.add(moveEffect);
-
         break;
     }
   }
@@ -685,7 +681,6 @@ class SlotMachine extends PositionComponent {
     //显示连线
     List<GameResult> gameResultsList = gameResponse.resultMap.detail[0].result;
     gameResultsList.forEach((gameResult) => showLine(gameResult.line));
-
     //遮罩
     for(int i =0;i<winLines.length;i++){
       if(winLines[i] == winFirstRowLine){
@@ -710,7 +705,7 @@ class SlotMachine extends PositionComponent {
         positionIndexList.remove(2);
       }
     }
-    addMask();
+    addMask(false);
 
     //显示奖励金额
     int ratio = gameResponse.resultMap.detail[0].ratio;
@@ -803,7 +798,55 @@ class SlotMachine extends PositionComponent {
     }else{
       await Future.delayed(Duration(seconds: 3));
       isCanSpin = true;
+      // carouselLines();
     }
+  }
+
+  //轮播连线
+  Future<void> carouselLines() async {
+    for(int i = 0;i<winLines.length;i++){
+      if(winLines[i].isMounted){
+        remove(winLines[i]);
+      }
+    }
+    carouselLinesStart(0);
+  }
+
+  void carouselLinesStart(int index){
+    add(winLines[index]);
+    positionIndexList = [0,1,2,3,4,5,6,7,8];
+    if(winLines[index] == winFirstRowLine){
+      positionIndexList.remove(3);
+      positionIndexList.remove(4);
+      positionIndexList.remove(5);
+    }else if(winLines[index] == winSecondRowLine){
+      positionIndexList.remove(0);
+      positionIndexList.remove(1);
+      positionIndexList.remove(2);
+    }else if(winLines[index] == winThirdRowLine){
+      positionIndexList.remove(6);
+      positionIndexList.remove(7);
+      positionIndexList.remove(8);
+    }else if(winLines[index] == winForthRowLine){
+      positionIndexList.remove(0);
+      positionIndexList.remove(4);
+      positionIndexList.remove(9);
+    }else{
+      positionIndexList.remove(6);
+      positionIndexList.remove(4);
+      positionIndexList.remove(2);
+    }
+    addMask(true);
+    Future.delayed(const Duration(seconds: 3), () {
+      for(int i = 0;i<winLines.length;i++){
+        if(winLines[i].isMounted){
+          remove(winLines[i]);
+        }
+      }
+      count++;
+      int newIndex = count % winLines.length;
+      carouselLinesStart(newIndex);
+    });
   }
 
   //显示连线
@@ -833,7 +876,7 @@ class SlotMachine extends PositionComponent {
   }
 
   //添加遮罩
-  Future<void> addMask() async {
+  Future<void> addMask(bool isCarouselLines) async {
     print(positionIndexList);
     for(int i = 0 ;i<positionIndexList.length;i++){
       switch (positionIndexList[i]) {
@@ -867,9 +910,11 @@ class SlotMachine extends PositionComponent {
       }
     }
 
-    for(int i = 0;i<slotMachineMagnificationRoller.blocksRoller.length;i++){
-      if(i != 3){
-        slotMachineMagnificationRoller.blocksRoller[i].addMask();
+    if(!isCarouselLines){
+      for(int i = 0;i<slotMachineMagnificationRoller.blocksRoller.length;i++){
+        if(i != 3){
+          slotMachineMagnificationRoller.blocksRoller[i].addMask();
+        }
       }
     }
   }
