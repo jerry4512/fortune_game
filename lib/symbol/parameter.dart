@@ -2,6 +2,7 @@
 class Parameter {
   static bool isOpenExMode = false;
   static bool isOpenQuickMode = false;
+  static bool isQuickMode = false;
 
   static int firstRollerRepeatTimes = 3;
   static int secondRollerRepeatTimes = 4;

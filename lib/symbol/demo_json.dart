@@ -50,7 +50,7 @@ class DemoJson{
             "panel": [
               "H1",
               "H2",
-              "W",
+              "H1",
               "N4",
               "N4",
               "N4",

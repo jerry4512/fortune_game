@@ -1,20 +1,20 @@
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:fortune_game/component/slot_machine/slot_machine.dart';
+import 'package:fortune_game/symbol/parameter.dart';
 
 typedef OnTap = void Function();
 
 class AutoSpinButton extends SpriteComponent with TapCallbacks{
   final OnTap onTap;
-  late final bool isQuickSpinning;
 
-
-  AutoSpinButton({required this.isQuickSpinning, required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(100,280), size: Vector2(50,50));
+  AutoSpinButton({required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(100,280), size: Vector2(50,50));
 
   EffectController? effectController ;
   @override
   void onLoad() async {
-    if(isQuickSpinning){
+    if(Parameter.isQuickMode){
       sprite = await Sprite.load('buttons/icon_stop_auto_spin_button.png');
     }else{
       sprite = await Sprite.load('buttons/icon_auto_spin_button.png');
@@ -26,8 +26,8 @@ class AutoSpinButton extends SpriteComponent with TapCallbacks{
   @override
   Future<void> onTapDown(TapDownEvent event) async {
     onTap();
-    isQuickSpinning = !isQuickSpinning;
-    if(isQuickSpinning){
+    Parameter.isQuickMode = !Parameter.isQuickMode;
+    if(Parameter.isQuickMode){
       sprite = await Sprite.load('buttons/icon_stop_auto_spin_button.png');
     }else{
       sprite = await Sprite.load('buttons/icon_auto_spin_button.png');
