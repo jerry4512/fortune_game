@@ -682,10 +682,10 @@ class SlotMachine extends PositionComponent {
     List<GameResult> gameResultsList = gameResponse.resultMap.detail[0].result;
     gameResultsList.sort((a, b) => a.line.compareTo(b.line));
     gameResultsList.forEach((gameResult) => showLine(gameResult.line));
-    for(int i =0;i<winLines.length;i++){
-      print(winLines[i].sprite!.image.toString());
-    }
-    print(winLines);
+    // for(int i =0;i<winLines.length;i++){
+    //   print(winLines[i].sprite!.);
+    // }
+    // print(winLines);
     //遮罩
     for(int i =0;i<winLines.length;i++){
       if(winLines[i] == winFirstRowLine){
@@ -814,26 +814,26 @@ class SlotMachine extends PositionComponent {
         remove(winLines[i]);
       }
     }
-    carouselLinesStart(0);
+    carouselLinesStart();
   }
 
-  void carouselLinesStart(int index){
-    print(winLines[index]);
-    add(winLines[index]);
+  void carouselLinesStart(){
+    SpriteComponent spriteComponent = winLines.first;
+    add(spriteComponent);
     positionIndexList = [0,1,2,3,4,5,6,7,8];
-    if(winLines[index] == winFirstRowLine){
+    if(spriteComponent == winFirstRowLine){
       positionIndexList.remove(3);
       positionIndexList.remove(4);
       positionIndexList.remove(5);
-    }else if(winLines[index] == winSecondRowLine){
+    }else if(spriteComponent == winSecondRowLine){
       positionIndexList.remove(0);
       positionIndexList.remove(1);
       positionIndexList.remove(2);
-    }else if(winLines[index] == winThirdRowLine){
+    }else if(spriteComponent == winThirdRowLine){
       positionIndexList.remove(6);
       positionIndexList.remove(7);
       positionIndexList.remove(8);
-    }else if(winLines[index] == winForthRowLine){
+    }else if(spriteComponent == winForthRowLine){
       positionIndexList.remove(0);
       positionIndexList.remove(4);
       positionIndexList.remove(8);
@@ -844,22 +844,18 @@ class SlotMachine extends PositionComponent {
     }
     addMask(true);
     Future.delayed(const Duration(seconds: 3), () {
-      for(int i = 0;i<winLines.length;i++){
-        if(winLines[i].isMounted){
-          remove(winLines[i]);
-          for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
+      remove(spriteComponent);
+      winLines.removeAt(0);
+      winLines.add(spriteComponent);
+      for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
             SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
             SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
             SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
             slotMachineRollerFirstBlock.removeMask();
             slotMachineRollerSecondBlock.removeMask();
             slotMachineRollerThirdBlock.removeMask();
-          }
-        }
       }
-      count++;
-      int newIndex = count % winLines.length;
-      carouselLinesStart(newIndex);
+      carouselLinesStart();
     });
   }
 
