@@ -65,13 +65,24 @@ class SlotMachineRollerBlock extends SpriteComponent {
   }
 
   Future<void> addMask() async {
+    if(image == 'blocks/symbol_wild.png'){
+      scale = Vector2(0.9,0.9);
+      priority = 1;
+    }
     await add(rectangleComponent);
   }
 
   void removeMask(){
-      if(rectangleComponent.isMounted){
-        remove(rectangleComponent);
+    if(image == 'blocks/symbol_wild.png'){
+      size = Vector2(140,110);
+      if(rollerIndex >= 2){
+        priority = 2;
+        scale = Vector2(1.2,1.2);
       }
+    }
+    if(rectangleComponent.isMounted){
+      remove(rectangleComponent);
+    }
   }
 
 }

@@ -766,6 +766,7 @@ class SlotMachine extends PositionComponent {
       if(totalWinAmount >= bettingAmountInt*15-1){
         BigWin bigWin = BigWin(startNumber: bettingAmount, endNumber:(bettingAmountInt*15-1).toString());
         add(bigWin);
+        carouselLines();
       }else{
         BigWin bigWin = BigWin(startNumber: bettingAmount, endNumber: totalWinAmount.toString());
         add(bigWin);
@@ -803,7 +804,6 @@ class SlotMachine extends PositionComponent {
     }else{
       await Future.delayed(Duration(seconds: 3));
       isCanSpin = true;
-      carouselLines();
     }
   }
 
@@ -817,6 +817,7 @@ class SlotMachine extends PositionComponent {
     carouselLinesStart();
   }
 
+  //轮播连线逻辑（添加删除遮罩）
   void carouselLinesStart(){
     SpriteComponent spriteComponent = winLines.first;
     add(spriteComponent);
@@ -843,7 +844,7 @@ class SlotMachine extends PositionComponent {
       positionIndexList.remove(2);
     }
     addMask(true);
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 2), () {
       remove(spriteComponent);
       winLines.removeAt(0);
       winLines.add(spriteComponent);
