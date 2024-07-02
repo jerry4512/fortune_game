@@ -44,7 +44,22 @@ class SlotMachineRollerBlock extends SpriteComponent {
       size = Vector2(125,93);
     }
 
-    rectangleComponent = RectangleComponent(size: (blockType == BlockType.block)?Vector2(174,142):Vector2(125,93),scale: (blockType == BlockType.block)?Vector2(1.2,1.2):Vector2(1,1), paint: Paint()..color = Colors.black.withOpacity(0.5));
+    Vector2 rectangleComponentSize = size;
+    Vector2 rectangleComponentScale =  Vector2(1,1);
+
+    if(image == 'blocks/symbol_wild.png'){
+      rectangleComponentSize = Vector2(140,110);
+      if(rollerIndex >= 2){
+        rectangleComponentScale = Vector2(1,1);
+      }
+    }
+
+    if(blockType == BlockType.magnification){
+      rectangleComponentSize = Vector2(125,93);
+      rectangleComponentScale = Vector2(1,1);
+    }
+
+    rectangleComponent = RectangleComponent(size: rectangleComponentSize,scale: rectangleComponentScale, paint: Paint()..color = Colors.black.withOpacity(0.5));
 
     super.onLoad();
   }
@@ -54,11 +69,9 @@ class SlotMachineRollerBlock extends SpriteComponent {
   }
 
   void removeMask(){
-    Future.delayed(const Duration(milliseconds: 50), () {
       if(rectangleComponent.isMounted){
         remove(rectangleComponent);
       }
-    });
   }
 
 }

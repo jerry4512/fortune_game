@@ -680,7 +680,12 @@ class SlotMachine extends PositionComponent {
   Future<void> showWinHint(GameResponse gameResponse) async {
     //显示连线
     List<GameResult> gameResultsList = gameResponse.resultMap.detail[0].result;
+    gameResultsList.sort((a, b) => a.line.compareTo(b.line));
     gameResultsList.forEach((gameResult) => showLine(gameResult.line));
+    for(int i =0;i<winLines.length;i++){
+      print(winLines[i].sprite!.image.toString());
+    }
+    print(winLines);
     //遮罩
     for(int i =0;i<winLines.length;i++){
       if(winLines[i] == winFirstRowLine){
@@ -798,7 +803,7 @@ class SlotMachine extends PositionComponent {
     }else{
       await Future.delayed(Duration(seconds: 3));
       isCanSpin = true;
-      // carouselLines();
+      carouselLines();
     }
   }
 
@@ -813,6 +818,7 @@ class SlotMachine extends PositionComponent {
   }
 
   void carouselLinesStart(int index){
+    print(winLines[index]);
     add(winLines[index]);
     positionIndexList = [0,1,2,3,4,5,6,7,8];
     if(winLines[index] == winFirstRowLine){
@@ -830,7 +836,7 @@ class SlotMachine extends PositionComponent {
     }else if(winLines[index] == winForthRowLine){
       positionIndexList.remove(0);
       positionIndexList.remove(4);
-      positionIndexList.remove(9);
+      positionIndexList.remove(8);
     }else{
       positionIndexList.remove(6);
       positionIndexList.remove(4);
@@ -841,6 +847,14 @@ class SlotMachine extends PositionComponent {
       for(int i = 0;i<winLines.length;i++){
         if(winLines[i].isMounted){
           remove(winLines[i]);
+          for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
+            SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
+            SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
+            SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
+            slotMachineRollerFirstBlock.removeMask();
+            slotMachineRollerSecondBlock.removeMask();
+            slotMachineRollerThirdBlock.removeMask();
+          }
         }
       }
       count++;
