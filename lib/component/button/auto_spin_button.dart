@@ -14,7 +14,7 @@ class AutoSpinButton extends SpriteComponent with TapCallbacks{
   EffectController? effectController ;
   @override
   void onLoad() async {
-    if(Parameter.isQuickMode){
+    if(Parameter.isAutoSpinMode){
       sprite = await Sprite.load('buttons/icon_stop_auto_spin_button.png');
     }else{
       sprite = await Sprite.load('buttons/icon_auto_spin_button.png');
@@ -26,8 +26,8 @@ class AutoSpinButton extends SpriteComponent with TapCallbacks{
   @override
   Future<void> onTapDown(TapDownEvent event) async {
     onTap();
-    Parameter.isQuickMode = !Parameter.isQuickMode;
-    if(Parameter.isQuickMode){
+    Parameter.isAutoSpinMode = !Parameter.isAutoSpinMode;
+    if(Parameter.isAutoSpinMode){
       sprite = await Sprite.load('buttons/icon_stop_auto_spin_button.png');
     }else{
       sprite = await Sprite.load('buttons/icon_auto_spin_button.png');

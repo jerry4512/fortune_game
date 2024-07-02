@@ -236,7 +236,7 @@ class SlotMachine extends PositionComponent {
 
     //开始转动按钮
     add(SpinButton(onTap: (){
-      if(rollerState == RollerState.stopped && !Parameter.isQuickMode){
+      if(rollerState == RollerState.stopped && !Parameter.isAutoSpinMode){
         startSpinning();
       }
     }));
@@ -407,7 +407,7 @@ class SlotMachine extends PositionComponent {
 
     autoSpinButton = AutoSpinButton(onTap: (){
       print('连续转动');
-      if(!Parameter.isQuickMode){
+      if(!Parameter.isAutoSpinMode){
         startSpinning();
       }
     });
@@ -646,7 +646,7 @@ class SlotMachine extends PositionComponent {
           magnificationRollerSpinning = false;
           // checkWin();
           newCheckWin();
-          if(Parameter.isQuickMode){
+          if(Parameter.isAutoSpinMode){
             int delay = (isWin)?13:1;
             Future.delayed(Duration(seconds: delay), () {
               startSpinning();
@@ -772,7 +772,7 @@ class SlotMachine extends PositionComponent {
         add(bigWin);
       }
     }else{
-      if(Parameter.isQuickMode){
+      if(Parameter.isAutoSpinMode){
         await Future.delayed(Duration(seconds: 2));
         isCanSpin = true;
         startSpinning();
@@ -797,7 +797,7 @@ class SlotMachine extends PositionComponent {
       add(superWin);
     }
 
-    if(Parameter.isQuickMode){
+    if(Parameter.isAutoSpinMode){
       await Future.delayed(Duration(seconds: 4));
       isCanSpin = true;
       startSpinning();
