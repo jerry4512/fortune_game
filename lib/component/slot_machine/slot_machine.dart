@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:fortune_game/component/button/auto_spin_button.dart';
-import 'package:fortune_game/component/button/bet_button.dart';
+import 'package:fortune_game/component/button/bet/bet_button.dart';
 import 'package:fortune_game/component/button/ex_bg_button.dart';
 import 'package:fortune_game/component/button/ex_button.dart';
 import 'package:fortune_game/component/button/quick_start_button.dart';
@@ -285,16 +285,22 @@ class SlotMachine extends PositionComponent {
         exTag = ExTag();
         add(exTag);
         add(ExAnimation());
-        for(int i = 0;i<slotMachineBlocksFirstRoller.blocksRoller.length;i++){
-            SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.blocksRoller[i];
-            SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.blocksRoller[i];
-            SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.blocksRoller[i];
-            SlotMachineRollerBlock slotMachineMagnificationRollerBlock = slotMachineMagnificationRoller.blocksRoller[i];
-            slotMachineRollerFirstBlock.removeMask();
-            slotMachineRollerSecondBlock.removeMask();
-            slotMachineRollerThirdBlock.removeMask();
-            slotMachineMagnificationRollerBlock.removeMask();
+        //移除winLine
+        for(int i = 0;i<winLines.length;i++){
+          if(winLines[i].isMounted){
+            remove(winLines[i]);
+          }
         }
+        // for(int i = 0;i<slotMachineBlocksFirstRoller.defaultBlocks.length;i++){
+        //     SlotMachineRollerBlock slotMachineRollerFirstBlock = slotMachineBlocksFirstRoller.defaultBlocks[i];
+        //     SlotMachineRollerBlock slotMachineRollerSecondBlock = slotMachineBlocksSecondRoller.defaultBlocks[i];
+        //     SlotMachineRollerBlock slotMachineRollerThirdBlock = slotMachineBlocksThirdRoller.defaultBlocks[i];
+        //     SlotMachineRollerBlock slotMachineMagnificationRollerBlock = slotMachineMagnificationRoller.defaultBlocks[i];
+        //     slotMachineRollerFirstBlock.removeMask();
+        //     slotMachineRollerSecondBlock.removeMask();
+        //     slotMachineRollerThirdBlock.removeMask();
+        //     slotMachineMagnificationRollerBlock.removeMask();
+        // }
         Future.delayed(const Duration(seconds: 1), () {
           changeExMode();
         });

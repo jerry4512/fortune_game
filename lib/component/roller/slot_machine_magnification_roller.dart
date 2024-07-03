@@ -151,11 +151,13 @@ class SlotMachineMagnificationRoller extends PositionComponent with HasGameRef {
       return false; // Odd
     }
   }
+
   void changeExMode(){
-    removeAll(components);
-    for(int i = 0 ; i < blocksRoller.length; i++){
-      print( blocksRoller[i].image);
+    for(int i = 0 ; i < components.length; i++){
+      SlotMachineRollerBlock? block = components[i] as SlotMachineRollerBlock?;
+      block!.removeMask();
     }
+    removeAll(components);
     defaultBlocks = blocksRoller;
     blocksRoller = [];
     newBlocks = [];
@@ -222,7 +224,7 @@ class SlotMachineMagnificationRoller extends PositionComponent with HasGameRef {
       blocksRoller = defaultBlocks;
       components = [];
       for(int i = 0 ; i < defaultBlocks.length; i++){
-        defaultBlocks[i].removeMask();
+        defaultBlocks[i].rectangleComponent!.removeFromParent();
         components.add(defaultBlocks[i]);
       }
       addAll(components);

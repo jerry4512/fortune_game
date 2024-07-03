@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:fortune_game/component/bet_option/bet_number.dart';
+import 'package:fortune_game/symbol/parameter.dart';
 
 typedef OnTap = void Function(String);
 
@@ -122,7 +123,27 @@ class BetButton extends SpriteComponent with TapCallbacks{
 
   @override
   void update(double dt) {
-
+    if(Parameter.isOpenExMode){
+      remove(textComponent);
+      double betNumberDouble = double.parse(betNumber);
+      double newBetNumber = betNumberDouble*1.5;
+      textComponent = TextComponent(
+        text: 'Bet $newBetNumber',
+        position: Vector2(-1, 50),
+        size: Vector2(50, 20),
+        scale: Vector2(0.9,0.9),
+      );
+      add(textComponent);
+    }else{
+      remove(textComponent);
+      textComponent = TextComponent(
+        text: 'Bet $betNumber',
+        position: Vector2(-1, 50),
+        size: Vector2(50, 20),
+        scale: Vector2(0.9,0.9),
+      );
+      add(textComponent);
+    }
   }
 
 }

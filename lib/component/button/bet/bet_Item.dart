@@ -1,0 +1,6 @@
+//
+//
+// class BetItem {
+//   String betNumber;
+//
+// }

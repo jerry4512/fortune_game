@@ -22,7 +22,7 @@ class SlotMachineRollerBlock extends SpriteComponent {
 
   MoveEffect? moveEffect;
 
-  late RectangleComponent rectangleComponent;
+  RectangleComponent? rectangleComponent;
 
   @override
   void onLoad() async {
@@ -69,7 +69,7 @@ class SlotMachineRollerBlock extends SpriteComponent {
       scale = Vector2(0.9,0.9);
       priority = 1;
     }
-    await add(rectangleComponent);
+    await add(rectangleComponent!);
   }
 
   void removeMask(){
@@ -80,8 +80,8 @@ class SlotMachineRollerBlock extends SpriteComponent {
         scale = Vector2(1.2,1.2);
       }
     }
-    if(rectangleComponent.isMounted){
-      remove(rectangleComponent);
+    if(rectangleComponent!=null && rectangleComponent!.isMounted){
+      remove(rectangleComponent!);
     }
   }
 

@@ -257,10 +257,11 @@ class SlotMachineBlocksRoller extends PositionComponent{
   }
 
   void changeExMode(int indexRoller){
-    removeAll(components);
-    for(int i = 0 ; i < blocksRoller.length; i++){
-      print( blocksRoller[i].image);
+    for(int i = 0 ; i < components.length; i++){
+      SlotMachineRollerBlock? block = components[i] as SlotMachineRollerBlock?;
+      block!.removeMask();
     }
+    removeAll(components);
     defaultBlocks = blocksRoller;
     blocksRoller = [];
     newBlocks = [];
