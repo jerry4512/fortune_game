@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:flutter/material.dart';
 import 'package:fortune_game/component/bet_option/bet_number.dart';
 import 'package:fortune_game/symbol/parameter.dart';
 
@@ -20,6 +23,12 @@ class BetButton extends SpriteComponent with TapCallbacks{
 
   late TextComponent textComponent;
 
+  List<String> betNumberList = ['1000', '200', '8', '700', '100', '5', '500', '50', '3', '400', '20', '2', '300', '10', '1'];
+  List<Vector2> betNumberPositionList = [Vector2(-65, -275), Vector2(25, -275), Vector2(112, -275), Vector2(-65, -220), Vector2(25, -220), Vector2(112, -220), Vector2(-65, -165), Vector2(25, -165), Vector2(112, -165), Vector2(-65, -110), Vector2(25, -110), Vector2(112, -110), Vector2(-65, -55), Vector2(25, -55), Vector2(112, -55)];
+
+  //选中框
+  late RectangleComponent rectangleComponent;
+
   @override
   void onLoad() async {
     sprite = await Sprite.load('buttons/icon_bet.png');
@@ -34,64 +43,67 @@ class BetButton extends SpriteComponent with TapCallbacks{
 
     add(textComponent);
 
+    // rectangleComponent = RectangleComponent(size: Vector2(86, 57), position: Vector2(betNumberPositionList[betNumberList.indexOf(betNumber)].x,betNumberPositionList[betNumberList.indexOf(betNumber)].y+13), anchor: Anchor.center, paint: Paint()..color = Colors.yellow.withOpacity(0.5));
+
     super.onLoad();
   }
 
   Future<void> init() async {
     spriteComponent = SpriteComponent(
         sprite: await Sprite.load('bet_options_frame_l.png'),
-    anchor: Anchor.bottomCenter,
-    scale: Vector2(0.45,0.45),
-    position: Vector2(25,-10)
+        anchor: Anchor.bottomCenter,
+        scale: Vector2(0.45,0.45),
+        position: Vector2(25,-10)
     );
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '1000', numberPosition: Vector2(-65, -275)));
+    }, number: betNumberList[0], numberPosition: betNumberPositionList[0]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '200', numberPosition: Vector2(25, -275)));
+    }, number: betNumberList[1], numberPosition: betNumberPositionList[1]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '8', numberPosition: Vector2(112, -275)));
+    }, number: betNumberList[2], numberPosition: betNumberPositionList[2]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '700', numberPosition: Vector2(-65, -220)));
+    }, number: betNumberList[3], numberPosition: betNumberPositionList[3]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '100', numberPosition: Vector2(25, -220)));
+    }, number: betNumberList[4], numberPosition: betNumberPositionList[4]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '5', numberPosition: Vector2(112, -220)));
+    }, number: betNumberList[5], numberPosition: betNumberPositionList[5]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '500', numberPosition: Vector2(-65, -165)));
+    }, number: betNumberList[6], numberPosition: betNumberPositionList[6]));
     components.add((BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '50', numberPosition: Vector2(25, -165))));
+    }, number: betNumberList[7], numberPosition: betNumberPositionList[7])));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '3', numberPosition: Vector2(112, -165)));
+    }, number: betNumberList[8], numberPosition: betNumberPositionList[8]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '400', numberPosition: Vector2(-65, -110)));
+    }, number: betNumberList[9], numberPosition: betNumberPositionList[9]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '20', numberPosition: Vector2(25, -110)));
+    }, number: betNumberList[10], numberPosition: betNumberPositionList[10]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '2', numberPosition: Vector2(112, -110)));
+    }, number: betNumberList[11], numberPosition: betNumberPositionList[11]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '300', numberPosition: Vector2(-65, -55)));
+    }, number: betNumberList[12], numberPosition: betNumberPositionList[12]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '10', numberPosition: Vector2(25, -55)));
+    }, number: betNumberList[13], numberPosition: betNumberPositionList[13]));
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
-    }, number: '1', numberPosition: Vector2(112, -55)));
+    }, number: betNumberList[14], numberPosition: betNumberPositionList[14]));
   }
 
   void betNumberOnTap(String number){
+    isPressed = !isPressed;
     betNumber = number;
     remove(textComponent);
     textComponent = TextComponent(
@@ -102,19 +114,21 @@ class BetButton extends SpriteComponent with TapCallbacks{
     );
     add(textComponent);
     remove(spriteComponent);
+    // rectangleComponent.removeFromParent();
     removeAll(components);
     onTap(betNumber);
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-
     isPressed = !isPressed;
     if(isPressed){
       add(spriteComponent);
+      // add(rectangleComponent);
       addAll(components);
     }else{
       remove(spriteComponent);
+      // rectangleComponent.removeFromParent();
       removeAll(components);
     }
 
@@ -144,6 +158,7 @@ class BetButton extends SpriteComponent with TapCallbacks{
       );
       add(textComponent);
     }
-  }
+    // rectangleComponent = RectangleComponent(size: Vector2(86, 57), position: Vector2(betNumberPositionList[betNumberList.indexOf(betNumber)].x,betNumberPositionList[betNumberList.indexOf(betNumber)].y+13), anchor: Anchor.center, paint: Paint()..color = Colors.yellow.withOpacity(0.5));
 
+  }
 }
