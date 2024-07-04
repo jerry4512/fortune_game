@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:flutter/material.dart';
 
 typedef OnTap = void Function();
 
@@ -11,7 +14,9 @@ class SpinButton extends SpriteComponent with TapCallbacks{
 
   @override
   void onLoad() async {
+    paint = Paint()..color =  Colors.black;
     sprite = await Sprite.load('buttons/spin_button.png');
+
     super.onLoad();
   }
 

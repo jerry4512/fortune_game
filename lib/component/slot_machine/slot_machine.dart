@@ -754,24 +754,26 @@ class SlotMachine extends PositionComponent {
       }
     }
     int lineHintCount = 0;
-    map.forEach((key, value) {
-      int count = value['count'];
-      int amount = value['amount'];
-      int odd = value['odd'];
-      double result1 = (odd/5);
-      double showOdd = result1* int.parse(bettingAmount);
-      LineHint lineHint = LineHint(block: key, magnification: ratio.toString(),bettingOdds: showOdd.toString(), lines: count.toString(), score: amount.toString(), lineHintCount: lineHintCount);
-      add(lineHint);
-      lineHintCount++;
-    });
-    showMagnificationBlock(totalWinAmount.toString());
+    if(totalWinAmount <= bettingAmountInt*5){
+      map.forEach((key, value) {
+        int count = value['count'];
+        int amount = value['amount'];
+        int odd = value['odd'];
+        double result1 = (odd/5);
+        double showOdd = result1* int.parse(bettingAmount);
+        LineHint lineHint = LineHint(block: key, magnification: ratio.toString(),bettingOdds: showOdd.toString(), lines: count.toString(), score: amount.toString(), lineHintCount: lineHintCount);
+        add(lineHint);
+        lineHintCount++;
+      });
+    }
+    showMagnificationBlock(totalWinAmount.toString(), bettingAmountInt);
 
     // await Future.delayed(Duration(seconds: 3));
     // BigMegaSuperWin bigMegaSuperWin = BigMegaSuperWin(startNumber: bettingAmount, endNumber: totalWinAmount.toString(), showCount: 3);
     // add(bigMegaSuperWin);
 
 
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(milliseconds: 1500));
     if(totalWinAmount >= bettingAmountInt*5){
       if(totalWinAmount >= bettingAmountInt*15-1){
         BigWin bigWin = BigWin(startNumber: bettingAmount, endNumber:(bettingAmountInt*15-1).toString());
@@ -945,7 +947,7 @@ class SlotMachine extends PositionComponent {
   }
 
   //成功连线后倍率方块的动画效果
-  void showMagnificationBlock(String totalWinAmount){
+  void showMagnificationBlock(String totalWinAmount, int bettingAmountInt){
     SlotMachineRollerBlock slotMachineRollerMagnificationBlock = slotMachineMagnificationRoller.blocksRoller[3];
     winSlotMachineRollerMagnificationBlock = WinMagnificationBlock(image: slotMachineRollerMagnificationBlock.image);
     add(winSlotMachineRollerMagnificationBlock);
@@ -954,13 +956,15 @@ class SlotMachine extends PositionComponent {
       MoveEffect moveEffect = MoveEffect.to(Vector2(winSlotMachineRollerMagnificationBlock.position.x-270, winSlotMachineRollerMagnificationBlock.position.y),
           effectController,onComplete: (){
             remove(frameWinBg);
-            frameWinBg = FrameWinBg(score: totalWinAmount, bettingOdds: bettingAmount, needAnimation: false);
-            add(frameWinBg);
-            Future.delayed(const Duration(milliseconds: 1300), () {
-              remove(frameWinBg);
-            });
-            winSlotMachineRollerMagnificationBlock.removeAll(exBgSpriteComponent.children.whereType<Effect>());
-            remove(winSlotMachineRollerMagnificationBlock);
+            if(double.parse(totalWinAmount) <= bettingAmountInt*5){
+              frameWinBg = FrameWinBg(score: totalWinAmount, bettingOdds: bettingAmount, needAnimation: false);
+              add(frameWinBg);
+              Future.delayed( Duration(milliseconds: (double.parse(totalWinAmount) <= bettingAmountInt*5)?1750:3000), () {
+                remove(frameWinBg);
+              });
+              winSlotMachineRollerMagnificationBlock.removeAll(exBgSpriteComponent.children.whereType<Effect>());
+              remove(winSlotMachineRollerMagnificationBlock);
+            }
           });
       winSlotMachineRollerMagnificationBlock.add(moveEffect);
     });
