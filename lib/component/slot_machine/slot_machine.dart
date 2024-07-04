@@ -540,6 +540,7 @@ class SlotMachine extends PositionComponent {
         slotMachineBlocksFirstRoller.defaultBlocks = [];
         slotMachineBlocksSecondRoller.defaultBlocks = [];
         slotMachineBlocksThirdRoller.defaultBlocks = [];
+        Parameter.isOpenBetOption = false;
         setRoundWinComponents('0');
         print('单次转动');
         print('开始转动');
@@ -946,7 +947,7 @@ class SlotMachine extends PositionComponent {
     winSlotMachineRollerMagnificationBlock = WinMagnificationBlock(image: slotMachineRollerMagnificationBlock.image);
     add(winSlotMachineRollerMagnificationBlock);
     Future.delayed(const Duration(seconds: 1), () {
-      EffectController effectController = EffectController(duration: 0.7, curve: Curves.linear);
+      EffectController effectController = EffectController(duration: 0.3, curve: Curves.linear);
       MoveEffect moveEffect = MoveEffect.to(Vector2(winSlotMachineRollerMagnificationBlock.position.x-270, winSlotMachineRollerMagnificationBlock.position.y),
           effectController,onComplete: (){
             remove(frameWinBg);

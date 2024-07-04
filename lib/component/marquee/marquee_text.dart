@@ -25,7 +25,7 @@ class MarqueeText extends PositionComponent with TapCallbacks{
   void onLoad() async {
     getMarqueeText();
     spriteComponent = SpriteComponent(sprite: await Sprite.load( 'marquees/marquee_text_1.png'));
-    effectController = RepeatedEffectController(LinearEffectController(15), 10);
+    effectController = RepeatedEffectController(LinearEffectController(15), 1000);
 
     moveEffect = MoveEffect.to(Vector2(spriteComponent.position.x -1400, spriteComponent.position.y),
         effectController);

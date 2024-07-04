@@ -1,9 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
-import 'package:flutter/material.dart';
 import 'package:fortune_game/component/bet_option/bet_number.dart';
 import 'package:fortune_game/symbol/parameter.dart';
 
@@ -13,11 +11,10 @@ class BetButton extends SpriteComponent with TapCallbacks{
   final OnTap onTap;
   BetButton({required this.onTap}) : super(anchor: Anchor.topCenter, position: Vector2(-130,280),size: Vector2(50,50),priority: 2);
 
-  late SpriteComponent spriteComponent;
+  SpriteComponent? spriteComponent;
 
   List<Component> components = [];
 
-  bool isPressed = false;
 
   String betNumber = '3';
 
@@ -103,7 +100,7 @@ class BetButton extends SpriteComponent with TapCallbacks{
   }
 
   void betNumberOnTap(String number){
-    isPressed = !isPressed;
+    Parameter.isOpenBetOption = !Parameter.isOpenBetOption;
     betNumber = number;
     remove(textComponent);
     textComponent = TextComponent(
@@ -113,7 +110,7 @@ class BetButton extends SpriteComponent with TapCallbacks{
       scale: Vector2(0.9,0.9),
     );
     add(textComponent);
-    remove(spriteComponent);
+    remove(spriteComponent!);
     // rectangleComponent.removeFromParent();
     removeAll(components);
     onTap(betNumber);
@@ -121,15 +118,17 @@ class BetButton extends SpriteComponent with TapCallbacks{
 
   @override
   void onTapDown(TapDownEvent event) {
-    isPressed = !isPressed;
-    if(isPressed){
-      add(spriteComponent);
-      // add(rectangleComponent);
-      addAll(components);
-    }else{
-      remove(spriteComponent);
-      // rectangleComponent.removeFromParent();
-      removeAll(components);
+    if(!Parameter.isAutoSpinMode){
+      Parameter.isOpenBetOption = !Parameter.isOpenBetOption;
+      if(Parameter.isOpenBetOption){
+        add(spriteComponent!);
+        // add(rectangleComponent);
+        addAll(components);
+      }else{
+        remove(spriteComponent!);
+        // rectangleComponent.removeFromParent();
+        removeAll(components);
+      }
     }
 
   }
@@ -157,6 +156,16 @@ class BetButton extends SpriteComponent with TapCallbacks{
         scale: Vector2(0.9,0.9),
       );
       add(textComponent);
+    }
+    if(Parameter.isOpenBetOption){
+      add(spriteComponent!);
+      // add(rectangleComponent);
+      addAll(components);
+    }else{
+      if(spriteComponent !=null &&spriteComponent!.isMounted){
+        remove(spriteComponent!);
+        removeAll(components);
+      }
     }
     // rectangleComponent = RectangleComponent(size: Vector2(86, 57), position: Vector2(betNumberPositionList[betNumberList.indexOf(betNumber)].x,betNumberPositionList[betNumberList.indexOf(betNumber)].y+13), anchor: Anchor.center, paint: Paint()..color = Colors.yellow.withOpacity(0.5));
 

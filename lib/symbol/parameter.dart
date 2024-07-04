@@ -4,6 +4,7 @@ class Parameter {
   static bool isOpenQuickMode = false;
   static bool isAutoSpinMode = false;
   static bool isSoundOn = true;
+  static bool isOpenBetOption = false;
 
   static int firstRollerRepeatTimes = 3;
   static int secondRollerRepeatTimes = 4;

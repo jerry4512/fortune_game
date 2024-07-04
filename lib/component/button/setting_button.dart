@@ -20,6 +20,7 @@ class SettingButton extends SpriteComponent with TapCallbacks{
   @override
   void onLoad() async {
     sprite = await Sprite.load('buttons/icon_setting.png');
+    priority = 2;
 
     menuSpriteComponent = SpriteComponent(
       sprite: await Sprite.load('setting/setting_background.png'),
