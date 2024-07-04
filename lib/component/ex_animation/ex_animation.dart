@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/animation.dart';
+import 'package:fortune_game/symbol/parameter.dart';
 
 
 class ExAnimation extends PositionComponent{
@@ -81,8 +82,10 @@ class ExAnimation extends PositionComponent{
       magnification_5x.add(sizeEffect_5x);
 
       MoveEffect moveEffect_5x = MoveEffect.to(Vector2(148, 8), EffectController(duration: 0.55, curve: Curves.ease),
-          onComplete: (){
+          onComplete: () async {
             remove(magnification_5x);
+            await Future.delayed(Duration(milliseconds: 500));
+            Parameter.isPlayingExAnimation = false;
           });
 
       OpacityEffect opacityEffect_5x =OpacityEffect.fadeOut(EffectController(duration: 1.5));

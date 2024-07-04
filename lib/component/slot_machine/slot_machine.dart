@@ -696,10 +696,6 @@ class SlotMachine extends PositionComponent {
     List<GameResult> gameResultsList = gameResponse.resultMap.detail[0].result;
     gameResultsList.sort((a, b) => a.line.compareTo(b.line));
     gameResultsList.forEach((gameResult) => showLine(gameResult.line));
-    // for(int i =0;i<winLines.length;i++){
-    //   print(winLines[i].sprite!.);
-    // }
-    // print(winLines);
     //遮罩
     for(int i =0;i<winLines.length;i++){
       if(winLines[i] == winFirstRowLine){
