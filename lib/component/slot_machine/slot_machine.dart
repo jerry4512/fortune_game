@@ -12,6 +12,7 @@ import 'package:fortune_game/component/button/setting_button.dart';
 import 'package:fortune_game/component/ex_animation/ex_animation.dart';
 import 'package:fortune_game/component/ex_animation/ex_tag.dart';
 import 'package:fortune_game/component/marquee/marquee_text.dart';
+import 'package:fortune_game/component/roller/gameview_component.dart';
 import 'package:fortune_game/component/roller/slot_machine_blocks_roller.dart';
 import 'package:fortune_game/component/roller/slot_machine_magnification_roller.dart';
 import 'package:fortune_game/component/roller/slot_machine_roller_block.dart';
@@ -61,7 +62,7 @@ class SlotMachine extends PositionComponent {
   late List<Component> thirdComponents;
   late List<Component> magnificationComponents;
 
-  late ClipComponent clipComponentFirst;
+  late PositionComponent clipComponentFirst;
   late ClipComponent clipComponentSecond;
   late ClipComponent clipComponentThird;
   late ClipComponent clipComponentMagnification;
@@ -269,6 +270,10 @@ class SlotMachine extends PositionComponent {
       position: Vector2(0, 343),
     );
     add(balanceTextComponent);
+
+    add(GameViewClipComponent(onTap: (){
+      startSpinning();
+    }));
 
     super.onLoad();
   }
@@ -541,6 +546,8 @@ class SlotMachine extends PositionComponent {
         slotMachineBlocksSecondRoller.defaultBlocks = [];
         slotMachineBlocksThirdRoller.defaultBlocks = [];
         Parameter.isOpenBetOption = false;
+        isOpenExButton = false;
+        closeExButton();
         setRoundWinComponents('0');
         print('单次转动');
         print('开始转动');
