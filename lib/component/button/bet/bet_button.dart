@@ -21,7 +21,12 @@ class BetButton extends SpriteComponent with TapCallbacks{
   late TextComponent textComponent;
 
   List<String> betNumberList = ['1000', '200', '8', '700', '100', '5', '500', '50', '3', '400', '20', '2', '300', '10', '1'];
-  List<Vector2> betNumberPositionList = [Vector2(-65, -275), Vector2(25, -275), Vector2(112, -275), Vector2(-65, -220), Vector2(25, -220), Vector2(112, -220), Vector2(-65, -165), Vector2(25, -165), Vector2(112, -165), Vector2(-65, -110), Vector2(25, -110), Vector2(112, -110), Vector2(-65, -55), Vector2(25, -55), Vector2(112, -55)];
+  List<Vector2> betNumberPositionList = [Vector2(-62, -235),Vector2(26, -235),Vector2(114, -235),
+    Vector2(-62, -180),Vector2(26, -180),Vector2(114, -180),
+    Vector2(-62, -125),Vector2(26, -125),Vector2(114, -125),
+    Vector2(-62, -70),Vector2(26, -70),Vector2(114, -70),
+    Vector2(-62, -15),Vector2(26, -15),Vector2(114, -15),
+  ];
 
   //选中框
   late RectangleComponent rectangleComponent;
@@ -34,6 +39,7 @@ class BetButton extends SpriteComponent with TapCallbacks{
     textComponent = TextComponent(
       text: 'Bet $betNumber',
       position: Vector2(-1, 50),
+      priority: 2,
       size: Vector2(50, 20),
       scale: Vector2(0.9,0.9),
     );
@@ -50,7 +56,8 @@ class BetButton extends SpriteComponent with TapCallbacks{
         sprite: await Sprite.load('bet_options_frame_l.png'),
         anchor: Anchor.bottomCenter,
         scale: Vector2(0.45,0.45),
-        position: Vector2(25,-10)
+        position: Vector2(25,-10),
+        priority: 2
     );
     components.add(BetNumber(onTap:(number){
       betNumberOnTap(number);
@@ -137,37 +144,25 @@ class BetButton extends SpriteComponent with TapCallbacks{
   @override
   void update(double dt) {
     if(Parameter.isOpenExMode){
-      remove(textComponent);
-      double betNumberDouble = double.parse(betNumber);
-      double newBetNumber = betNumberDouble*1.5;
-      textComponent = TextComponent(
-        text: 'Bet $newBetNumber',
-        position: Vector2(-1, 50),
-        size: Vector2(50, 20),
-        scale: Vector2(0.9,0.9),
-      );
-      add(textComponent);
+        double betNumberDouble = double.parse(betNumber);
+        double newBetNumber = betNumberDouble*1.5;
+        changeBetNumber(newBetNumber.toString());
     }else{
-      remove(textComponent);
-      textComponent = TextComponent(
-        text: 'Bet $betNumber',
-        position: Vector2(-1, 50),
-        size: Vector2(50, 20),
-        scale: Vector2(0.9,0.9),
-      );
-      add(textComponent);
+      changeBetNumber(betNumber);
     }
-    if(Parameter.isOpenBetOption){
-      add(spriteComponent!);
-      // add(rectangleComponent);
-      addAll(components);
-    }else{
-      if(spriteComponent !=null &&spriteComponent!.isMounted){
-        remove(spriteComponent!);
-        removeAll(components);
-      }
-    }
+
     // rectangleComponent = RectangleComponent(size: Vector2(86, 57), position: Vector2(betNumberPositionList[betNumberList.indexOf(betNumber)].x,betNumberPositionList[betNumberList.indexOf(betNumber)].y+13), anchor: Anchor.center, paint: Paint()..color = Colors.yellow.withOpacity(0.5));
 
+  }
+
+  void changeBetNumber(String number){
+    remove(textComponent);
+    textComponent = TextComponent(
+      text: 'Bet $number',
+      position: Vector2(-1, 50),
+      size: Vector2(50, 20),
+      scale: Vector2(0.9,0.9),
+    );
+    add(textComponent);
   }
 }

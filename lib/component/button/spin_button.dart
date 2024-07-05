@@ -14,7 +14,6 @@ class SpinButton extends SpriteComponent with TapCallbacks{
 
   @override
   void onLoad() async {
-    paint = Paint()..color =  Colors.black;
     sprite = await Sprite.load('buttons/spin_button.png');
 
     super.onLoad();

@@ -209,6 +209,10 @@ class SlotMachine extends PositionComponent {
       anchor: Anchor.topCenter,
     ));
 
+    add(GameViewClipComponent(onTap: (){
+      startSpinning();
+    }));
+
     //设定按钮
     add(SettingButton(onTap: (){
       print('设定按钮');
@@ -270,10 +274,6 @@ class SlotMachine extends PositionComponent {
       position: Vector2(0, 343),
     );
     add(balanceTextComponent);
-
-    add(GameViewClipComponent(onTap: (){
-      startSpinning();
-    }));
 
     super.onLoad();
   }
